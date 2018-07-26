@@ -26,9 +26,6 @@ firstForm.addEventListener("submit", function (event) {
         startTime = Number(timeInputVal);
 
         // future plan: run function to clear window contents and add options to put names of people. Cleaner. See for loop in createSecontForm function that I commented out
-
-        createSecondForm(people, startTime);
-
     }
 
 
