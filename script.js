@@ -11,12 +11,11 @@ var welcome = document.getElementById("welcome");
 
 var stopwatchArea = document.getElementById("stopwatch-area");
 
+// might not need these as globals
 var people = 0;
 var startTime = 0; //minutes
 
-
-// submit.addEventListener("");
-
+// first submit
 firstForm.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -25,9 +24,11 @@ firstForm.addEventListener("submit", function (event) {
     var peoplesNamesArr = namesInput.value.split(", ");
 
     if (peopleInputVal.match(/[^0-9]/g) || timeInputVal.match(/[^0-9]/g)) {
+        stopwatchArea.innerText = "";
         welcomeMsg.innerText = "Please check your number inputs! Thanks"
         welcomeMsg.classList.add("notice");
     } else if (peoplesNamesArr.length != peopleInputVal) {
+        stopwatchArea.innerText = "";
         welcomeMsg.innerText = "Please ensure that the number of names that you input matches the number of people presenting"
         welcomeMsg.classList.add("notice");
     } else {
@@ -41,7 +42,7 @@ firstForm.addEventListener("submit", function (event) {
         // populate stopwatch area
         stopwatchArea.innerText = "";
 
-
+        createStopwatchArea(people, startTime, peoplesNamesArr);
 
     }
 
@@ -49,7 +50,25 @@ firstForm.addEventListener("submit", function (event) {
 });
 
 
+// function to create stopwatch area
+function createStopwatchArea(ppl, time, pplArr) {
 
+    // create "overview" text description
+    var areaIntro = document.createElement("p");
+    areaIntro.textContent = "There are " + ppl + " people (" + pplArr.join(", ") + "), and each person has " + (time / ppl).toPrecision(2) + " minutes to present";
+    areaIntro.classList.add("notice");
+    stopwatchArea.appendChild(areaIntro);
+
+    for (var i = 0; i < people; i++) {
+
+        // call a function that creates each person's area, then loop through it in here, passing in the pplArr[i] as the argument each time
+
+        //testing things out
+        var hi = document.createElement("p");
+        hi.textContent = pplArr[i]
+        stopwatchArea.appendChild(hi)
+    }
+}
 
 
 
