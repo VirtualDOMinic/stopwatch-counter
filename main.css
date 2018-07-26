@@ -1,4 +1,51 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(#79D29C, #4062BF);
+    width: 90vw;
+    min-height: 100vh;
+    height: 100%;
+    background-repeat: no-repeat;
+    padding-left: 2rem;
+}
+
 .notice {
     color: red;
     font-weight: bold;
+}
+
+p {
+    font-size: 1.4rem;
+    margin-bottom: 0;
+}
+
+h1 {
+    font-size: 2.8rem;
+    text-shadow: 0 0 2.8rem lavenderblush;
+    /* such a pointless text shadow lol */
+}
+
+input {
+    font-size: 1.4rem;
+    background-color: lavender;
+}
+
+#welcome {
+    width: 100%;
+}
+
+input {
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    padding: 3px;
+}
+
+input[type="submit"] {
+    margin: 0.35rem;
+    border: none;
+}
+
+button {
+    /* put stuff here */
 }

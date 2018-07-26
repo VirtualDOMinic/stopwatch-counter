@@ -10,19 +10,28 @@
 </head>
 
 <body>
+
+    <h1>Group stopwatch trial</h1>
+
     <noscript>
         <p id="noscript-warning">Please enable JavaScript!</p>
     </noscript>
-    <h1>Group stopwatch trial</h1>
+
+    <section id="stopwatch-area">
+
+    </section>
+
     <section id="welcome">
-        <p id="welcome-msg">Welcome! Please fill in the form below to get started</p>
+        <p id="welcome-msg">Welcome! Please fill in the form below to get started. This has been rushed and is very much a WIP</p>
         <form id="first-form">
-            Number of people presenting:
+            <p>Number of people presenting:</p>
             <input type="number" name="number-of-people" placeholder="integer pls" value="4" required>
-            <br> Total time (minutes):
+            <br>
+            <p>Total time (minutes):</p>
             <input type="number" name="time-minutes" placeholder="minutes pls" value="12" required>
-            <br> Names (separated by &quot; , &quot;):
-            <input type="text" name="names" placeholder="minutes pls" value="12" required>
+            <br>
+            <p>Names (separated by &quot; , &quot;). Suggested to add them in order (left to right):</p>
+            <input type="text" name="names" placeholder="names pls" value="a, b, c, d" required>
             <input type="submit" value="Submit!" id="submit-btn-1">
         </form>
     </section>
