@@ -6,24 +6,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Stopwatch test!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="simpler-main.css" />
 </head>
 
 <body>
 
-    <span class="notice">This doesn't work yet. Currently feeling lazy (want to release this soon), so working on a much easier (quicker) implementation
-        over at the
-        <a href="simpler.html">simpler version of this</a>
+    <span class="notice">Currently feeling lazy so working on this simple version of my idea below! More advanced version will become available
+        at index.html eventually</a>
     </span>
 
-    <h1>Group stopwatch trial</h1>
+    <h1>Group stopwatch trial (simpler version)</h1>
 
     <noscript>
-        <p id="noscript-warning">Please enable JavaScript!</p>
+        <p id="noscript-warning" class="notice">Please enable JavaScript!</p>
     </noscript>
 
     <section id="stopwatch-area">
-
+        <div id="person_0">
+            <h2>First person</h2>
+            <input type="text" name="names" placeholder="person 0 name" value="">
+        </div>
+        <div id="person_1">
+            <h2>Second person</h2>
+            <input type="text" name="names" placeholder="person 1 name" value="">
+        </div>
+        <div id="person_2">
+            <h2>Third person</h2>
+            <input type="text" name="names" placeholder="person 2 name" value="">
+        </div>
+        <div id="person_3">
+            <h2>Fourth person</h2>
+            <input type="text" name="names" placeholder="person 3 name" value="">
+        </div>
     </section>
 
     <section id="welcome">
@@ -41,7 +55,7 @@
         </form>
     </section>
     <div id="timer"></div>
-    <script src="script.js" type="application/javascript"></script>
+    <script src="simpler-script.js" type="application/javascript"></script>
 </body>
 
 </html>
