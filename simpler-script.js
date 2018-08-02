@@ -1,3 +1,39 @@
+var firstPersonBtn = document.getElementById("0-start-btn");
+
+firstPersonBtn.addEventListener("click", () => {
+    console.log("clicked start button!")
+    countUp();
+})
+
+// idea: have an "active person" gloabl variable/property
+// ...that gets assigned by the respective "start/resume" clicks
+// ...and then a global while loop/settimeout that adds to
+// the "global"/total time, as well as ONLY the time of the
+// ...person who's denoted by the "active person"
+// alternatively do this with a class/id? Might be more clunky tho
+
+var minsDisplay = document.getElementById("mins");
+var secsDisplay = document.getElementById("secs");
+
+function countUp(secs) {
+    var now = Date.now();
+
+    () => {
+
+    }
+
+    // minsDisplay.innerText = "5";
+}
+
+
+
+//
+//
+//
+//////////////// OLD STUFF BELOW \\\\\\\\\\\\\\\\\
+//
+//
+//
 var timer = document.getElementById("timer");
 
 var numberOfPeople = document.getElementsByName("number-of-people")[0];
@@ -17,85 +53,85 @@ var startTime = 0; //minutes
 
 // Note to self...
 if (!window) {
-  console.log("no window object! This scripts gonna fail");
+    console.log("no window object! This scripts gonna fail");
 } else {
-  console.log("woo theres a window!");
+    console.log("woo theres a window!");
 }
 
 // first submit
-firstForm.addEventListener("submit", function(event) {
-  event.preventDefault();
+firstForm.addEventListener("submit", function (event) {
+    event.preventDefault();
 
-  var peopleInputVal = numberOfPeople.value;
-  var timeInputVal = timeInput.value;
-  var peoplesNamesArr = namesInput.value.split(", ");
+    var peopleInputVal = numberOfPeople.value;
+    var timeInputVal = timeInput.value;
+    var peoplesNamesArr = namesInput.value.split(", ");
 
-  if (peopleInputVal.match(/[^0-9]/g) || timeInputVal.match(/[^0-9]/g)) {
-    stopwatchArea.innerText = "";
-    welcomeMsg.innerText = "Please check your number inputs! Thanks";
-    welcomeMsg.classList.add("notice");
-  } else if (peoplesNamesArr.length != peopleInputVal) {
-    stopwatchArea.innerText = "";
-    welcomeMsg.innerText =
-      "Please ensure that the number of names that you input matches the number of people presenting";
-    welcomeMsg.classList.add("notice");
-  } else {
-    welcomeMsg.innerText = "";
-    people = Number(peopleInputVal);
-    startTime = Number(timeInputVal);
-    console.log(peoplesNamesArr);
+    if (peopleInputVal.match(/[^0-9]/g) || timeInputVal.match(/[^0-9]/g)) {
+        stopwatchArea.innerText = "";
+        welcomeMsg.innerText = "Please check your number inputs! Thanks";
+        welcomeMsg.classList.add("notice");
+    } else if (peoplesNamesArr.length != peopleInputVal) {
+        stopwatchArea.innerText = "";
+        welcomeMsg.innerText =
+            "Please ensure that the number of names that you input matches the number of people presenting";
+        welcomeMsg.classList.add("notice");
+    } else {
+        welcomeMsg.innerText = "";
+        people = Number(peopleInputVal);
+        startTime = Number(timeInputVal);
+        console.log(peoplesNamesArr);
 
-    // future plan: run function to clear window contents and add options to put names of people. Cleaner. See for loop in createSecontForm function that I commented out
+        // future plan: run function to clear window contents and add options to put names of people. Cleaner. See for loop in createSecontForm function that I commented out
 
-    // populate stopwatch area
-    stopwatchArea.innerText = "";
+        // populate stopwatch area
+        stopwatchArea.innerText = "";
 
-    createStopwatchArea(people, startTime, peoplesNamesArr);
-  }
+        createStopwatchArea(people, startTime, peoplesNamesArr);
+    }
 });
 
 // function to create stopwatch area
 function createStopwatchArea(ppl, time, pplArr) {
-  // create "overview" text description
-  var areaIntro = document.createElement("p");
+    // create "overview" text description
+    var areaIntro = document.createElement("p");
 
-  var minsPerPerson = (time / ppl).toPrecision(2);
+    var minsPerPerson = (time / ppl).toPrecision(2);
 
-  areaIntro.textContent =
-    "There are " +
-    ppl +
-    " people (" +
-    pplArr.join(", ") +
-    "), and each person has " +
-    minsPerPerson +
-    " minutes to present";
-  areaIntro.classList.add("notice");
-  stopwatchArea.appendChild(areaIntro);
+    areaIntro.textContent =
+        "There are " +
+        ppl +
+        " people (" +
+        pplArr.join(", ") +
+        "), and each person has " +
+        minsPerPerson +
+        " minutes to present";
+    areaIntro.classList.add("notice");
+    stopwatchArea.appendChild(areaIntro);
 
-  createTimerObjects(minsPerPerson, pplArr);
+    createTimerObjects(minsPerPerson, pplArr);
 }
 
 // function to make objects to track peoples' time
 function createTimerObjects(mins, pplNames) {
-  pplNames.forEach((p, i) => {
-    window["presenter_" + i] = {
-      name: p,
-      timeAllocSecs: mins * 60,
-      timeTakenSecs: 0
-    };
-  });
+    pplNames.forEach((p, i) => {
+        window["presenter_" + i] = {
+            name: p,
+            timeAllocSecs: mins * 60,
+            timeTakenSecs: 0
+        };
+    });
 }
 
 // function to create divs for each person, displaying time left, time taken and button to start/stop
 function createPeoplesDivs() {
-  for (var i = 0; i < people; i++) {
-    // call a function that creates each person's area, then loop through it in here, passing in the pplArr[i] as the argument each time
+    for (var i = 0; i < people; i++) {
+        // call a function that creates each person's area, then loop through it in here, passing in the pplArr[i] as the argument each time
 
-    //testing things out
-    var hi = document.createElement("p");
-    hi.textContent = window["presenter_" + i];
-    stopwatchArea.appendChild(hi);
-  }
+        //testing things out
+        var hi = document.createElement("p");
+        hi.textContent = window["presenter_" + i];
+        stopwatchArea.appendChild(hi);
+    }
 }
 
 // Future plans...
