@@ -89,18 +89,52 @@ function createTimerObjects(mins, pplNames) {
 
 // function to create divs for each person, displaying time left, time taken and button to start/stop
 function createPeoplesDivs() {
+    // could use forEach here but not sure about browser support
     for (var i = 0; i < people; i++) {
         // call a function that creates each person's area, then loop through it in here, passing in the pplArr[i] as the argument each time
 
         //testing things out
-        var hi = document.createElement("p");
-        hi.textContent = window["presenter_" + i].name;
-        hi.id = "presenter_" + i;
-        stopwatchArea.appendChild(hi);
+        // var hi = document.createElement("p");
+        // hi.textContent = window["presenter_" + i].name;
+        // hi.id = "presenter_" + i;
+        // stopwatchArea.appendChild(hi);
+
+        createPeopleTest(i);
 
 
     }
 }
+
+
+function createPeopleTest(i){
+    var personDiv = document.createElement("div");
+    var timerButton = document.createElement("button");
+    personDiv.classList.add("test-div");
+    personDiv.id = "testID-" + i
+    timerButton.innerText = "Click me!";
+    timerButton.onclick = function () {console.log('wooo it works')}
+    personDiv.appendChild(timerButton)
+    stopwatchArea.appendChild(personDiv);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Future plans...
 
