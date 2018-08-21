@@ -11,6 +11,8 @@ var welcome = document.getElementById("welcome");
 
 var stopwatchArea = document.getElementById("stopwatch-area");
 
+var userSelected = "";
+
 // might not need these as globals
 var people = 0;
 var startTime = 0; //minutes
@@ -66,9 +68,9 @@ function createStopwatchArea(ppl, time, pplArr) {
         ppl +
         " people (" +
         pplArr.join(", ") +
-        "), and each person has " +
+        "), and each person should aim to present for " +
         minsPerPerson +
-        " minutes to present";
+        " minutes";
     areaIntro.classList.add("notice");
     stopwatchArea.appendChild(areaIntro);
 
@@ -110,14 +112,18 @@ function createPeopleTest(i){
     var personDiv = document.createElement("div");
     var timerButton = document.createElement("button");
     personDiv.classList.add("test-div");
-    personDiv.id = "testID-" + i
+    personDiv.id = "person_" + i
     timerButton.innerText = "Click me!";
-    timerButton.onclick = function () {console.log('wooo it works')}
+    timerButton.onclick = function (e) {selectUserForTimer(e)}
     personDiv.appendChild(timerButton)
     stopwatchArea.appendChild(personDiv);
 }
 
-
+selectUserForTimer = function(e) {
+    console.log(e.target.parentElement.id)
+    userSelected = e.target.parentElement.id;
+    console.log("consoleFunc console log has been called!")
+}
 
 
 

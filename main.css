@@ -3,7 +3,7 @@
 }
 
 body {
-    background: linear-gradient(#79D29C, #4062BF);
+    background: linear-gradient(rgb(156, 206, 176), rgb(125, 152, 224));
     width: 90vw;
     min-height: 100vh;
     height: 100%;
@@ -60,4 +60,20 @@ button {
     width: 400px;
     height: 500px;
     background-color: rgba(0, 0, 0, 0.3)
+}
+
+#stopwatch-area {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+div[id*='person_'] {
+    background-color: rgba(10, 10, 233, 0.15);
+    padding: 1rem;
+    margin: 0.5rem;
+    border-style: dotted;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
