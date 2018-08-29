@@ -1,3 +1,4 @@
+// elements to manipulate/check
 var timer = document.getElementById("timer");
 
 var numberOfPeople = document.getElementsByName("number-of-people")[0];
@@ -11,11 +12,8 @@ var welcome = document.getElementById("welcome");
 
 var stopwatchArea = document.getElementById("stopwatch-area");
 
-var userSelected = "";
-
-// might not need these as globals
-var people = 0;
-var startTime = 0; //minutes
+// current user selected. May make this part of a window.object instead
+// var userSelected = "";
 
 // Note to self...
 if (!window) {
@@ -23,6 +21,15 @@ if (!window) {
 } else {
   console.log("woo theres a window!");
 }
+
+// Having a go at making window object
+window.timerObj = {};
+window.timerObj.userSelected = "";
+window.timerObj.timerActive = false;
+
+// might not need these as globals
+var people = 0;
+var startTime = 0; //minutes
 
 // first submit
 firstForm.addEventListener("submit", function(event) {
@@ -32,6 +39,7 @@ firstForm.addEventListener("submit", function(event) {
   var timeInputVal = timeInput.value;
   var peoplesNamesArr = namesInput.value.split(", ");
 
+  //   input validation
   if (peopleInputVal.match(/[^0-9]/g) || timeInputVal.match(/[^0-9]/g)) {
     stopwatchArea.innerText = "";
     welcomeMsg.innerText = "Please check your number inputs! Thanks";
@@ -81,26 +89,18 @@ function createStopwatchArea(ppl, time, pplArr) {
 // function to make objects to track peoples' time
 function createTimerObjects(mins, pplNames) {
   pplNames.forEach((p, i) => {
-    window["presenter_" + i] = {
+    window.timerObj["presenter_" + i] = {
       name: p,
-      timeAllocSecs: mins * 60,
-      timeTakenSecs: 0
+      timeAllocMS: mins * 60000,
+      timeTakenMS: 0
     };
   });
 }
 
-// function to create divs for each person, displaying time left, time taken and button to start/stop
+// function to create divs for each person, eventually displaying time left, time taken and button to start/stop
 function createPeoplesDivs() {
   // could use forEach here but not sure about browser support
   for (var i = 0; i < people; i++) {
-    // call a function that creates each person's area, then loop through it in here, passing in the pplArr[i] as the argument each time
-
-    //testing things out
-    // var hi = document.createElement("p");
-    // hi.textContent = window["presenter_" + i].name;
-    // hi.id = "presenter_" + i;
-    // stopwatchArea.appendChild(hi);
-
     createPeopleTest(i);
   }
 }
@@ -123,26 +123,25 @@ selectUserForTimer = function(e) {
 };
 
 basicTimer = function() {
-    var timerSched = window.setInterval(timerCB, 1000);
+  var timerSched = window.setInterval(timerCB, 1000);
+  console.log(timerSched, "timersched ID");
 };
 
 var dateNow = Date.now();
 
 timerCB = function() {
-    var timeTest = 795000
-    // 13 mins 15 seconds
-    formatTime(timeTest)
-
-}
+  var timeTest = 795000;
+  // 13 mins 15 seconds
+  formatTime(timeTest);
+};
 
 formatTime = function(ms) {
-    var mins = 0;
-    var secs = 0;
-    mins += ms / 60000
-    secs += (ms % 60000)/1000
-    console.log(Math.floor(mins) + "m:" + secs + "s")
-}
-
+  var mins = 0;
+  var secs = 0;
+  mins += ms / 60000;
+  secs += (ms % 60000) / 1000;
+  console.log(Math.floor(mins) + "m:" + secs + "s");
+};
 
 //
 //
