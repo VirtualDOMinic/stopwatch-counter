@@ -14,9 +14,11 @@ body {
 .notice {
     color: mediumvioletred;
     font-weight: bold;
+    text-align: center;
 }
 
 p {
+    /* display: inline; */
     font-size: 1.4rem;
     margin-bottom: 0;
 }

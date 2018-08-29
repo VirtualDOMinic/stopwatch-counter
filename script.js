@@ -11,6 +11,7 @@ var welcomeMsg = document.getElementById("welcome-msg");
 var welcome = document.getElementById("welcome");
 
 var stopwatchArea = document.getElementById("stopwatch-area");
+var noticeArea = document.getElementById("notice-area");
 
 // current user selected. May make this part of a window.object instead
 // var userSelected = "";
@@ -22,10 +23,13 @@ if (!window) {
   console.log("woo theres a window!");
 }
 
-// Having a go at making window object
-window.timerObj = {};
-window.timerObj.userSelected = "";
-window.timerObj.timerActive = false;
+// Having a go at making timer object. Maybe add `people` and `startTime` vars here
+timerState = {
+  userSelected: undefined,
+  timerActive: false,
+  timeLeft: 0,
+};
+
 
 // might not need these as globals
 var people = 0;
@@ -80,7 +84,7 @@ function createStopwatchArea(ppl, time, pplArr) {
     minsPerPerson +
     " minutes";
   areaIntro.classList.add("notice");
-  stopwatchArea.appendChild(areaIntro);
+  noticeArea.appendChild(areaIntro);
 
   createTimerObjects(minsPerPerson, pplArr);
   createPeoplesDivs();
