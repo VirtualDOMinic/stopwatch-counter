@@ -38,7 +38,7 @@ var startTime = 0; //minutes
 // first submit
 firstForm.addEventListener("submit", function(event) {
   event.preventDefault();
-
+  console.log("Run: first form event listener")
   var peopleInputVal = numberOfPeople.value;
   var timeInputVal = timeInput.value;
   var peoplesNamesArr = namesInput.value.split(", ");
@@ -70,6 +70,7 @@ firstForm.addEventListener("submit", function(event) {
 
 // function to create stopwatch area
 function createStopwatchArea(ppl, time, pplArr) {
+  console.log("Run: createStopwatchArea")
   // create "overview" text description
   var areaIntro = document.createElement("p");
 
@@ -92,6 +93,7 @@ function createStopwatchArea(ppl, time, pplArr) {
 
 // function to make objects to track peoples' time
 function createTimerObjects(mins, pplNames) {
+  console.log("Run: createTimerObjects")
   pplNames.forEach((p, i) => {
     window.timerObj["presenter_" + i] = {
       name: p,
@@ -103,6 +105,7 @@ function createTimerObjects(mins, pplNames) {
 
 // function to create divs for each person, eventually displaying time left, time taken and button to start/stop
 function createPeoplesDivs() {
+  console.log("Run: createPeopleDivs")
   // could use forEach here but not sure about browser support
   for (var i = 0; i < people; i++) {
     createPeopleTest(i);
@@ -110,6 +113,7 @@ function createPeoplesDivs() {
 }
 
 function createPeopleTest(i) {
+  console.log("Run: createPeopleTest");
   var personDiv = document.createElement("div");
   var timerButton = document.createElement("button");
   personDiv.classList.add("test-div");
@@ -123,10 +127,12 @@ function createPeopleTest(i) {
 }
 
 selectUserForTimer = function(e) {
+  console.log("Run: selectUserForTimer")
   userSelected = e.target.parentElement.id;
 };
 
 basicTimer = function() {
+  console.log("Run: basicTimer")
   var timerSched = window.setInterval(timerCB, 1000);
   console.log(timerSched, "timersched ID");
 };
@@ -134,12 +140,14 @@ basicTimer = function() {
 var dateNow = Date.now();
 
 timerCB = function() {
+  console.log("Run: timerCB")
   var timeTest = 795000;
   // 13 mins 15 seconds
   formatTime(timeTest);
 };
 
 formatTime = function(ms) {
+  console.log("Run: formatTime")
   var mins = 0;
   var secs = 0;
   mins += ms / 60000;
