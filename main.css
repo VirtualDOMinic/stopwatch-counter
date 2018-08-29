@@ -70,7 +70,7 @@ button {
     justify-content: center;
 }
 
-div[id*='person_'] {
+div[id*='presenter_'] {
     background-color: rgba(10, 10, 233, 0.15);
     padding: 1rem;
     margin: 0.5rem;

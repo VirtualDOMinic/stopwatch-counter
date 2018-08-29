@@ -114,21 +114,21 @@ function createPeoplesDivs() {
 
 function createPeopleTest(i) {
   console.log("Run: createPeopleTest");
-  var personDiv = document.createElement("div");
+  var presenterDiv = document.createElement("div");
   var timerButton = document.createElement("button");
-  personDiv.classList.add("test-div");
-  personDiv.id = "person_" + i;
+  presenterDiv.classList.add("test-div");
+  presenterDiv.id = "presenter_" + i;
   timerButton.innerText = "Click me!";
   timerButton.onclick = function(e) {
     selectUserForTimer(e);
   };
-  personDiv.appendChild(timerButton);
-  stopwatchArea.appendChild(personDiv);
+  presenterDiv.appendChild(timerButton);
+  stopwatchArea.appendChild(presenterDiv);
 }
 
 selectUserForTimer = function(e) {
   console.log("Run: selectUserForTimer")
-  userSelected = e.target.parentElement.id;
+  timerState.userSelected = e.target.parentElement.id;
 };
 
 basicTimer = function() {
