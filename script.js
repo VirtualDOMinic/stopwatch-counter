@@ -95,7 +95,7 @@ function createStopwatchArea(ppl, time, pplArr) {
 function createTimerObjects(mins, pplNames) {
   console.log("Run: createTimerObjects")
   pplNames.forEach((p, i) => {
-    window.timerObj["presenter_" + i] = {
+    timerState["presenter_" + i] = {
       name: p,
       timeAllocMS: mins * 60000,
       timeTakenMS: 0
