@@ -118,7 +118,7 @@ function createPeopleTest(i) {
   var timerButton = document.createElement("button");
   presenterDiv.classList.add("test-div");
   presenterDiv.id = "presenter_" + i;
-  timerButton.innerText = "Click me!";
+  timerButton.innerText = "select!";
   timerButton.onclick = function(e) {
     selectUserForTimer(e);
   };
@@ -128,6 +128,7 @@ function createPeopleTest(i) {
 
 selectUserForTimer = function(e) {
   console.log("Run: selectUserForTimer")
+  console.log("this id = ", this.id)
   timerState.userSelected = e.target.parentElement.id;
 };
 
@@ -154,6 +155,14 @@ formatTime = function(ms) {
   secs += (ms % 60000) / 1000;
   console.log(Math.floor(mins) + "m:" + secs + "s");
 };
+
+updateButtonText = function(selected, prevSelected) {
+  // e.g. selected = "person_2", prevSelected = "person_0"
+  console.log("Run: updateButtonText")
+  document.getElementById(selected).getElementsByTagName("button")[0].innerText = "deselect"
+  document.getElementById(prevSelected).getElementsByTagName("button")[0].innerText = "select"
+}
+
 
 //
 //

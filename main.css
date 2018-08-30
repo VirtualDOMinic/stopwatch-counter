@@ -49,6 +49,10 @@ input[type="submit"] {
 }
 
 button {
+    font-size: 2rem;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 10%;
     /* put stuff here */
 }
 
