@@ -12,6 +12,7 @@ var welcome = document.getElementById("welcome");
 
 var stopwatchArea = document.getElementById("stopwatch-area");
 var noticeArea = document.getElementById("notice-area");
+var timerArea = document.getElementById("timer");
 
 // current user selected. May make this part of a window.object instead
 // var userSelected = "";
@@ -27,9 +28,8 @@ if (!window) {
 timerState = {
   userSelected: undefined,
   timerActive: false,
-  timeLeft: 0,
+  timeLeft: 0
 };
-
 
 // might not need these as globals
 var people = 0;
@@ -38,7 +38,7 @@ var startTime = 0; //minutes
 // first submit
 firstForm.addEventListener("submit", function(event) {
   event.preventDefault();
-  console.log("Run: first form event listener")
+  console.log("Run: first form event listener");
   var peopleInputVal = numberOfPeople.value;
   var timeInputVal = timeInput.value;
   var peoplesNamesArr = namesInput.value.split(", ");
@@ -70,7 +70,7 @@ firstForm.addEventListener("submit", function(event) {
 
 // function to create stopwatch area
 function createStopwatchArea(ppl, time, pplArr) {
-  console.log("Run: createStopwatchArea")
+  console.log("Run: createStopwatchArea");
   // create "overview" text description
   var areaIntro = document.createElement("p");
 
@@ -84,6 +84,8 @@ function createStopwatchArea(ppl, time, pplArr) {
     "), and each person should aim to present for " +
     minsPerPerson +
     " minutes";
+
+  timerArea.classList.remove("hidden"); // display main timer
   areaIntro.classList.add("notice");
   noticeArea.appendChild(areaIntro);
 
@@ -93,7 +95,7 @@ function createStopwatchArea(ppl, time, pplArr) {
 
 // function to make objects to track peoples' time
 function createTimerObjects(mins, pplNames) {
-  console.log("Run: createTimerObjects")
+  console.log("Run: createTimerObjects");
   pplNames.forEach((p, i) => {
     timerState["presenter_" + i] = {
       name: p,
@@ -105,7 +107,7 @@ function createTimerObjects(mins, pplNames) {
 
 // function to create divs for each person, eventually displaying time left, time taken and button to start/stop
 function createPeoplesDivs() {
-  console.log("Run: createPeopleDivs")
+  console.log("Run: createPeopleDivs");
   // could use forEach here but not sure about browser support
   for (var i = 0; i < people; i++) {
     createPeopleTest(i);
@@ -116,24 +118,35 @@ function createPeopleTest(i) {
   console.log("Run: createPeopleTest");
   var presenterDiv = document.createElement("div");
   var timerButton = document.createElement("button");
+  var presenterName = document.createElement("h3");
   presenterDiv.classList.add("test-div");
   presenterDiv.id = "presenter_" + i;
-  timerButton.innerText = "select!";
+  presenterName.innerText = timerState["presenter_" + i].name;
+  timerButton.innerText = "select";
   timerButton.onclick = function(e) {
-    selectUserForTimer(e);
+    var userSel = e.target.parentElement.id;
+    updateButtonText(userSel, timerState.userSelected);
+    selectUserForTimer(userSel);
   };
+  presenterDiv.appendChild(presenterName);
   presenterDiv.appendChild(timerButton);
   stopwatchArea.appendChild(presenterDiv);
+
+  console.log("finished createPeopleTest");
 }
 
-selectUserForTimer = function(e) {
-  console.log("Run: selectUserForTimer")
-  console.log("this id = ", this.id)
-  timerState.userSelected = e.target.parentElement.id;
+selectUserForTimer = function(usr) {
+  console.log("Run: selectUserForTimer");
+  // if user already selected, "deselect" them
+  if (timerState.userSelected === usr) {
+    timerState.userSelected = undefined;
+  } else {
+    timerState.userSelected = usr;
+  }
 };
 
 basicTimer = function() {
-  console.log("Run: basicTimer")
+  console.log("Run: basicTimer");
   var timerSched = window.setInterval(timerCB, 1000);
   console.log(timerSched, "timersched ID");
 };
@@ -141,14 +154,14 @@ basicTimer = function() {
 var dateNow = Date.now();
 
 timerCB = function() {
-  console.log("Run: timerCB")
+  console.log("Run: timerCB");
   var timeTest = 795000;
   // 13 mins 15 seconds
   formatTime(timeTest);
 };
 
 formatTime = function(ms) {
-  console.log("Run: formatTime")
+  console.log("Run: formatTime");
   var mins = 0;
   var secs = 0;
   mins += ms / 60000;
@@ -158,11 +171,21 @@ formatTime = function(ms) {
 
 updateButtonText = function(selected, prevSelected) {
   // e.g. selected = "person_2", prevSelected = "person_0"
-  console.log("Run: updateButtonText")
-  document.getElementById(selected).getElementsByTagName("button")[0].innerText = "deselect"
-  document.getElementById(prevSelected).getElementsByTagName("button")[0].innerText = "select"
-}
-
+  console.log("Run: updateButtonText");
+  document
+    .getElementById(selected)
+    .getElementsByTagName("button")[0].innerText = "deselect";
+  if (
+    prevSelected !== undefined &&
+    (selected !== prevSelected ||
+      document.getElementById(selected).getElementsByTagName("button")[0]
+        .innerText === "deselect")
+  ) {
+    document
+      .getElementById(prevSelected)
+      .getElementsByTagName("button")[0].innerText = "select";
+  }
+};
 
 //
 //

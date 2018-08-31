@@ -29,6 +29,16 @@ h1 {
     /* such a pointless text shadow lol */
 }
 
+h2 {
+    font-size: 2.4rem;
+    /* such a pointless text shadow lol */
+}
+
+h3 {
+    font-size: 2rem;
+    /* such a pointless text shadow lol */
+}
+
 input {
     font-size: 1.4rem;
     background-color: lavender;
@@ -49,10 +59,10 @@ input[type="submit"] {
 }
 
 button {
-    font-size: 2rem;
+    font-size: 1.4rem;
     margin: 0.5rem;
     padding: 0.5rem;
-    border-radius: 10%;
+    border: solid 2px rgb(21, 21, 22);
     /* put stuff here */
 }
 
@@ -89,4 +99,8 @@ div[id*='presenter_'] {
     text-align: center;
     line-height: 6rem;
     margin: 1rem;
+}
+
+.hidden {
+    display: none;
 }
