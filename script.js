@@ -14,6 +14,8 @@ var stopwatchArea = document.getElementById("stopwatch-area");
 var noticeArea = document.getElementById("notice-area");
 var timerArea = document.getElementById("timer");
 
+var mainStartBtn = document.getElementById("main-timer-start");
+
 // current user selected. May make this part of a window.object instead
 // var userSelected = "";
 
@@ -67,6 +69,17 @@ firstForm.addEventListener("submit", function(event) {
     createStopwatchArea(people, startTime, peoplesNamesArr);
   }
 });
+
+function timerFunc(){
+  console.log("timer func being called")
+}
+
+// main timer event listener function
+mainStartBtn.addEventListener("click", function(){
+  var intervalID = window.setInterval(timerFunc, 1000)
+
+  console.log("main start btn working!")
+})
 
 // function to create stopwatch area
 function createStopwatchArea(ppl, time, pplArr) {
