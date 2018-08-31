@@ -35,7 +35,7 @@ timerState = {
 
 // might not need these as globals
 var people = 0;
-var startTime = 0; //minutes
+// var startTime = 0; //minutes
 
 // first submit
 firstForm.addEventListener("submit", function(event) {
@@ -58,7 +58,7 @@ firstForm.addEventListener("submit", function(event) {
   } else {
     welcomeMsg.innerText = "";
     people = Number(peopleInputVal);
-    startTime = Number(timeInputVal);
+    timerState.timeLeft = Number(timeInputVal) * 60 * 1000;
     console.log(peoplesNamesArr);
 
     // future plan: run function to clear window contents and add options to put names of people. Cleaner. See for loop in createSecontForm function that I commented out
@@ -66,12 +66,20 @@ firstForm.addEventListener("submit", function(event) {
     // populate stopwatch area
     stopwatchArea.innerText = "";
 
-    createStopwatchArea(people, startTime, peoplesNamesArr);
+    createStopwatchArea(people, timerState.timeLeft, peoplesNamesArr);
   }
 });
 
 function timerFunc(){
+  // placeholder func. Need to add functionality (will call timer display DOM functions and update timer object)
   console.log("timer func being called")
+}
+
+function updateTimerStateObj(){
+  // placeholder func to update timerState.timeLeft value, and the specific presenter's time taken
+  if (timerState.timerActive === false){
+    console.log("Timer apparently not active")
+  }
 }
 
 // main timer event listener function
