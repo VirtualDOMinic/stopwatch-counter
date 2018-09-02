@@ -26,16 +26,15 @@ if (!window) {
   console.log("woo theres a window!");
 }
 
-// Having a go at making timer object. Maybe add `people` and `startTime` vars here
+// Having a go at making timer object. Maybe add `people` var here
 timerState = {
   userSelected: undefined,
   timerActive: false,
-  timeLeft: 0
+  timeLeftMS: 0
 };
 
 // might not need these as globals
 var people = 0;
-// var startTime = 0; //minutes
 
 // first submit
 firstForm.addEventListener("submit", function(event) {
@@ -58,7 +57,7 @@ firstForm.addEventListener("submit", function(event) {
   } else {
     welcomeMsg.innerText = "";
     people = Number(peopleInputVal);
-    timerState.timeLeft = Number(timeInputVal) * 60 * 1000;
+    timerState.timeLeftMS = Number(timeInputVal) * 60 * 1000;
     console.log(peoplesNamesArr);
 
     // future plan: run function to clear window contents and add options to put names of people. Cleaner. See for loop in createSecontForm function that I commented out
@@ -66,7 +65,7 @@ firstForm.addEventListener("submit", function(event) {
     // populate stopwatch area
     stopwatchArea.innerText = "";
 
-    createStopwatchArea(people, timerState.timeLeft, peoplesNamesArr);
+    createStopwatchArea(people, timerState.timeLeftMS, peoplesNamesArr);
   }
 });
 
@@ -95,7 +94,8 @@ function createStopwatchArea(ppl, time, pplArr) {
   // create "overview" text description
   var areaIntro = document.createElement("p");
 
-  var minsPerPerson = (time / ppl).toPrecision(2);
+  // parseFloat is to avoid using scientific/exp (e) notation
+  var minsPerPerson = parseFloat((time / ppl).toPrecision(2));
 
   areaIntro.textContent =
     "There are " +
@@ -103,7 +103,7 @@ function createStopwatchArea(ppl, time, pplArr) {
     " people (" +
     pplArr.join(", ") +
     "), and each person should aim to present for " +
-    minsPerPerson +
+    (minsPerPerson/60000).toPrecision(2) +
     " minutes";
 
   timerArea.classList.remove("hidden"); // display main timer
@@ -112,15 +112,52 @@ function createStopwatchArea(ppl, time, pplArr) {
 
   createTimerObjects(minsPerPerson, pplArr);
   createPeoplesDivs();
+  // then call a function to add event listener to stopwatch area
+  stopwatchAreaListener();
 }
 
+// WORK IN PROGRESS - CURRENTLY OVERLAPS WITH FUNCTIONALITY OF OTHER FUNCTIONS EG BUTTON
+// stopwatchAreaListener = function(){
+//   console.log("stopwatchAreaListener")
+//   document.getElementById("stopwatch-area").addEventListener("click", x => x.target.parentElement.childNodes.forEach(y => {
+//     if(x.target.id !== y.id && x.target.id.includes("presenter")){
+//       y.classList.remove("selected")
+//       y.classList.add("normal")
+//     } else if (x.target.id === y.id && x.target.id.includes("presenter")){
+//       y.classList.remove("normal")
+//       y.classList.add("selected")
+//     }
+//   }));
+// }
+
+stopwatchAreaListener = function(){
+  console.log("stopwatchAreaListener")
+  document.getElementById("stopwatch-area").addEventListener("click", x => {
+    if(x.target.id.includes("presenter")){
+      x.target.parentElement.childNodes.forEach(y => {
+        if(x.target.id !== y.id){
+          y.classList.remove("selected")
+          y.classList.add("normal")
+        } else if (x.target.id === y.id){
+          y.classList.remove("normal")
+          y.classList.add("selected")
+        }
+      })
+    }
+});
+}
+
+// stopwatchAreaListener = function(){
+//   document.getElementById("stopwatch-area").addEventListener("click", x => x.target.parentElement.childNodes.forEach(y => console.log(y.classList)));
+// }
+
 // function to make objects to track peoples' time
-function createTimerObjects(mins, pplNames) {
+function createTimerObjects(timeMS, pplNames) {
   console.log("Run: createTimerObjects");
   pplNames.forEach((p, i) => {
     timerState["presenter_" + i] = {
       name: p,
-      timeAllocMS: mins * 60000,
+      timeAllocMS: timeMS,
       timeTakenMS: 0
     };
   });
@@ -141,6 +178,7 @@ function createPeopleTest(i) {
   var timerButton = document.createElement("button");
   var presenterName = document.createElement("h3");
   presenterDiv.classList.add("test-div");
+  presenterDiv.classList.add("normal");
   presenterDiv.id = "presenter_" + i;
   presenterName.innerText = timerState["presenter_" + i].name;
   timerButton.innerText = "select";
