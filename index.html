@@ -11,8 +11,8 @@
 
 <body>
 
-    <span class="notice">This doesn't work yet. Currently feeling lazy (want to release this soon), so working on a much easier (quicker) implementation
-        over at the
+    <span class="notice">This doesn't work yet. Currently feeling lazy (want to release this soon), so working on a much
+        easier (quicker) implementation over at the
         <a href="simpler.html">simpler version of this</a>
     </span>
 
@@ -22,12 +22,27 @@
         <p id="noscript-warning">Please enable JavaScript!</p>
     </noscript>
 
-    <section id="stopwatch-area">
+    <section id="notice-area">
 
     </section>
 
+    <section id="timer-stopwatch-area">
+        <div id="timer" class="hidden">
+            <div>
+            <span id="mins">00</span>
+            :
+            <span id="secs">00</span>
+        </div>
+            <button id="main-timer-start">Start main timer</button>
+        </div>
+        <div id="stopwatch-area">
+    </section>
+
+    </div>
+
     <section id="welcome">
-        <p id="welcome-msg">Welcome! Please fill in the form below to get started. This has been rushed and is very much a WIP</p>
+        <p id="welcome-msg">Welcome! Please fill in the form below to get started. This has been rushed and is very much
+            a WIP</p>
         <form id="first-form">
             <p>Number of people presenting:</p>
             <input type="number" name="number-of-people" placeholder="integer pls" value="4" required>
@@ -40,7 +55,6 @@
             <input type="submit" value="Submit!" id="submit-btn-1">
         </form>
     </section>
-    <div id="timer"></div>
     <script src="script.js" type="application/javascript"></script>
 </body>
 
