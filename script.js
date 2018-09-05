@@ -132,18 +132,40 @@ function createStopwatchArea(ppl, time, pplArr) {
 
 stopwatchAreaListener = function(){
   console.log("stopwatchAreaListener")
-  document.getElementById("stopwatch-area").addEventListener("click", x => {
+  document.getElementById("stopwatch-area").addEventListener("click", function(x) {
     if(x.target.id.includes("presenter")){
       x.target.parentElement.childNodes.forEach(y => {
         if(x.target.id !== y.id){
           y.classList.remove("selected")
           y.classList.add("normal")
+        } else if (x.target.id === y.id && y.id === timerState.userSelected){
+          y.classList.remove("selected")
+          y.classList.add("normal")
+          selectUserForTimer(y.id)
         } else if (x.target.id === y.id){
           y.classList.remove("normal")
           y.classList.add("selected")
+          selectUserForTimer(y.id)
         }
       })
     }
+    else if(x.target.nodeName.toLowerCase() === "button"){
+      console.log("button clicked!")
+      if(x.target.innerText === "deselect"){ 
+        console.log("deselect initiated")
+      }
+      x.target.parentElement.parentElement.childNodes.forEach(function(y){
+        if(x.target.parentElement.id !== y.id){
+          y.classList.remove("selected")
+          y.classList.add("normal")
+        } else if (x.target.parentElement.id === y.id){
+          y.classList.remove("normal")
+          y.classList.add("selected")
+          selectUserForTimer(y.id)
+        }
+      })
+    }
+
 });
 }
 
@@ -185,7 +207,7 @@ function createPeopleTest(i) {
   timerButton.onclick = function(e) {
     var userSel = e.target.parentElement.id;
     updateButtonText(userSel, timerState.userSelected);
-    selectUserForTimer(userSel);
+    // selectUserForTimer(userSel);
   };
   presenterDiv.appendChild(presenterName);
   presenterDiv.appendChild(timerButton);
