@@ -134,6 +134,8 @@ stopwatchAreaListener = function(){
   console.log("stopwatchAreaListener")
   document.getElementById("stopwatch-area").addEventListener("click", function(x) {
     if(x.target.id.includes("presenter")){
+      drySelector(x.target)
+      /*
       x.target.parentElement.childNodes.forEach(y => {
         if(x.target.id !== y.id){
           y.classList.remove("selected")
@@ -148,12 +150,20 @@ stopwatchAreaListener = function(){
           selectUserForTimer(y.id)
         }
       })
+      */
     }
-    else if(x.target.nodeName.toLowerCase() === "button"){
+    /* else */ if(x.target.nodeName.toLowerCase() === "button"){
       console.log("button clicked!")
+      if(x.target.innerText === "select"){
+        x.target.innerText = "deselect"
+      } else {
+        x.target.innerText = "select"
+      }
+
       if(x.target.innerText === "deselect"){ 
         console.log("deselect initiated")
       }
+
       x.target.parentElement.parentElement.childNodes.forEach(function(y){
         if(x.target.parentElement.id !== y.id){
           y.classList.remove("selected")
@@ -204,11 +214,13 @@ function createPeopleTest(i) {
   presenterDiv.id = "presenter_" + i;
   presenterName.innerText = timerState["presenter_" + i].name;
   timerButton.innerText = "select";
+  /*
   timerButton.onclick = function(e) {
     var userSel = e.target.parentElement.id;
     updateButtonText(userSel, timerState.userSelected);
     // selectUserForTimer(userSel);
   };
+  */
   presenterDiv.appendChild(presenterName);
   presenterDiv.appendChild(timerButton);
   stopwatchArea.appendChild(presenterDiv);
@@ -250,6 +262,7 @@ formatTime = function(ms) {
   console.log(Math.floor(mins) + "m:" + secs + "s");
 };
 
+/*
 updateButtonText = function(selected, prevSelected) {
   // e.g. selected = "person_2", prevSelected = "person_0"
   console.log("Run: updateButtonText");
@@ -267,6 +280,14 @@ updateButtonText = function(selected, prevSelected) {
       .getElementsByTagName("button")[0].innerText = "select";
   }
 };
+*/
+
+/*
+updateButtonTextHelper = function(a, b) {
+  // this is to replace the "updateButtonText" function, for use inside "stopwatchAreaListener"
+
+}
+*/
 
 //
 //
@@ -297,3 +318,29 @@ function createSecondForm(ppl, time) {
 }
 
 */
+
+
+// CODE IS WAY TOO WET! Below, I should make a function to update the div style, button text and userSelected, with inputs being:
+// name of div, id of div?
+function drySelector(divClicked){
+  console.log("drySelector called");
+  divClicked.parentElement.childNodes.forEach(function(div){
+    if(div.id === divClicked.id){
+      if(div.id === timerState.userSelected){
+      div.classList.remove("selected");
+      div.classList.add("normal");
+      div.getElementsByTagName("button")[0].innerText = "select";
+      timerState.userSelected = undefined;
+      } else {
+        div.classList.remove("normal");
+        div.classList.add("selected");
+        div.getElementsByTagName("button")[0].innerText = "deselect";
+        timerState.userSelected = div.id;
+      }
+    } else {
+      div.classList.remove("selected");
+      div.classList.add("normal");
+      div.getElementsByTagName("button")[0].innerText = "select";
+    }
+  })
+}
