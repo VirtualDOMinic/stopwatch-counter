@@ -69,24 +69,24 @@ firstForm.addEventListener("submit", function(event) {
   }
 });
 
-function timerFunc(){
+function timerFunc() {
   // placeholder func. Need to add functionality (will call timer display DOM functions and update timer object)
-  console.log("timer func being called")
+  console.log("timer func being called");
 }
 
-function updateTimerStateObj(){
+function updateTimerStateObj() {
   // placeholder func to update timerState.timeLeft value, and the specific presenter's time taken
-  if (timerState.timerActive === false){
-    console.log("Timer apparently not active")
+  if (timerState.timerActive === false) {
+    console.log("Timer apparently not active");
   }
 }
 
 // main timer event listener function
-mainStartBtn.addEventListener("click", function(){
-  var intervalID = window.setInterval(timerFunc, 1000)
+mainStartBtn.addEventListener("click", function() {
+  var intervalID = window.setInterval(timerFunc, 1000);
 
-  console.log("main start btn working!")
-})
+  console.log("main start btn working!");
+});
 
 // function to create stopwatch area
 function createStopwatchArea(ppl, time, pplArr) {
@@ -103,7 +103,7 @@ function createStopwatchArea(ppl, time, pplArr) {
     " people (" +
     pplArr.join(", ") +
     "), and each person should aim to present for " +
-    (minsPerPerson/60000).toPrecision(2) +
+    (minsPerPerson / 60000).toPrecision(2) +
     " minutes";
 
   timerArea.classList.remove("hidden"); // display main timer
@@ -130,12 +130,14 @@ function createStopwatchArea(ppl, time, pplArr) {
 //   }));
 // }
 
-stopwatchAreaListener = function(){
-  console.log("stopwatchAreaListener")
-  document.getElementById("stopwatch-area").addEventListener("click", function(x) {
-    if(x.target.id.includes("presenter")){
-      drySelector(x.target)
-      /*
+stopwatchAreaListener = function() {
+  console.log("stopwatchAreaListener");
+  document
+    .getElementById("stopwatch-area")
+    .addEventListener("click", function(x) {
+      if (x.target.id.includes("presenter")) {
+        drySelector(x.target);
+        /*
       x.target.parentElement.childNodes.forEach(y => {
         if(x.target.id !== y.id){
           y.classList.remove("selected")
@@ -151,33 +153,31 @@ stopwatchAreaListener = function(){
         }
       })
       */
-    }
-    /* else */ if(x.target.nodeName.toLowerCase() === "button"){
-      console.log("button clicked!")
-      if(x.target.innerText === "select"){
-        x.target.innerText = "deselect"
-      } else {
-        x.target.innerText = "select"
-      }
-
-      if(x.target.innerText === "deselect"){ 
-        console.log("deselect initiated")
-      }
-
-      x.target.parentElement.parentElement.childNodes.forEach(function(y){
-        if(x.target.parentElement.id !== y.id){
-          y.classList.remove("selected")
-          y.classList.add("normal")
-        } else if (x.target.parentElement.id === y.id){
-          y.classList.remove("normal")
-          y.classList.add("selected")
-          selectUserForTimer(y.id)
+      } else if (x.target.nodeName.toLowerCase() === "button") {
+        console.log("button clicked!");
+        if (x.target.innerText === "select") {
+          x.target.innerText = "deselect";
+        } else {
+          x.target.innerText = "select";
         }
-      })
-    }
 
-});
-}
+        if (x.target.innerText === "deselect") {
+          console.log("deselect initiated");
+        }
+
+        x.target.parentElement.parentElement.childNodes.forEach(function(y) {
+          if (x.target.parentElement.id !== y.id) {
+            y.classList.remove("selected");
+            y.classList.add("normal");
+          } else if (x.target.parentElement.id === y.id) {
+            y.classList.remove("normal");
+            y.classList.add("selected");
+            selectUserForTimer(y.id);
+          }
+        });
+      }
+    });
+};
 
 // stopwatchAreaListener = function(){
 //   document.getElementById("stopwatch-area").addEventListener("click", x => x.target.parentElement.childNodes.forEach(y => console.log(y.classList)));
@@ -319,18 +319,17 @@ function createSecondForm(ppl, time) {
 
 */
 
-
 // CODE IS WAY TOO WET! Below, I should make a function to update the div style, button text and userSelected, with inputs being:
 // name of div, id of div?
-function drySelector(divClicked){
+function drySelector(divClicked) {
   console.log("drySelector called");
-  divClicked.parentElement.childNodes.forEach(function(div){
-    if(div.id === divClicked.id){
-      if(div.id === timerState.userSelected){
-      div.classList.remove("selected");
-      div.classList.add("normal");
-      div.getElementsByTagName("button")[0].innerText = "select";
-      timerState.userSelected = undefined;
+  divClicked.parentElement.childNodes.forEach(function(div) {
+    if (div.id === divClicked.id) {
+      if (div.id === timerState.userSelected) {
+        div.classList.remove("selected");
+        div.classList.add("normal");
+        div.getElementsByTagName("button")[0].innerText = "select";
+        timerState.userSelected = undefined;
       } else {
         div.classList.remove("normal");
         div.classList.add("selected");
@@ -342,5 +341,5 @@ function drySelector(divClicked){
       div.classList.add("normal");
       div.getElementsByTagName("button")[0].innerText = "select";
     }
-  })
+  });
 }
