@@ -26,16 +26,15 @@ if (!window) {
   console.log("woo theres a window!");
 }
 
-// Having a go at making timer object. Maybe add `people` and `startTime` vars here
+// Having a go at making timer object. Maybe add `people` var here
 timerState = {
   userSelected: undefined,
   timerActive: false,
-  timeLeft: 0
+  timeLeftMS: 0
 };
 
 // might not need these as globals
 var people = 0;
-// var startTime = 0; //minutes
 
 // first submit
 firstForm.addEventListener("submit", function(event) {
@@ -58,7 +57,7 @@ firstForm.addEventListener("submit", function(event) {
   } else {
     welcomeMsg.innerText = "";
     people = Number(peopleInputVal);
-    timerState.timeLeft = Number(timeInputVal) * 60 * 1000;
+    timerState.timeLeftMS = Number(timeInputVal) * 60 * 1000;
     console.log(peoplesNamesArr);
 
     // future plan: run function to clear window contents and add options to put names of people. Cleaner. See for loop in createSecontForm function that I commented out
@@ -66,28 +65,28 @@ firstForm.addEventListener("submit", function(event) {
     // populate stopwatch area
     stopwatchArea.innerText = "";
 
-    createStopwatchArea(people, timerState.timeLeft, peoplesNamesArr);
+    createStopwatchArea(people, timerState.timeLeftMS, peoplesNamesArr);
   }
 });
 
-function timerFunc(){
+function timerFunc() {
   // placeholder func. Need to add functionality (will call timer display DOM functions and update timer object)
-  console.log("timer func being called")
+  console.log("timer func being called");
 }
 
-function updateTimerStateObj(){
+function updateTimerStateObj() {
   // placeholder func to update timerState.timeLeft value, and the specific presenter's time taken
-  if (timerState.timerActive === false){
-    console.log("Timer apparently not active")
+  if (timerState.timerActive === false) {
+    console.log("Timer apparently not active");
   }
 }
 
 // main timer event listener function
-mainStartBtn.addEventListener("click", function(){
-  var intervalID = window.setInterval(timerFunc, 1000)
+mainStartBtn.addEventListener("click", function() {
+  var intervalID = window.setInterval(timerFunc, 1000);
 
-  console.log("main start btn working!")
-})
+  console.log("main start btn working!");
+});
 
 // function to create stopwatch area
 function createStopwatchArea(ppl, time, pplArr) {
@@ -95,7 +94,8 @@ function createStopwatchArea(ppl, time, pplArr) {
   // create "overview" text description
   var areaIntro = document.createElement("p");
 
-  var minsPerPerson = (time / ppl).toPrecision(2);
+  // parseFloat is to avoid using scientific/exp (e) notation
+  var minsPerPerson = parseFloat((time / ppl).toPrecision(2));
 
   areaIntro.textContent =
     "There are " +
@@ -103,7 +103,7 @@ function createStopwatchArea(ppl, time, pplArr) {
     " people (" +
     pplArr.join(", ") +
     "), and each person should aim to present for " +
-    minsPerPerson +
+    (minsPerPerson / 60000).toPrecision(2) +
     " minutes";
 
   timerArea.classList.remove("hidden"); // display main timer
@@ -112,15 +112,84 @@ function createStopwatchArea(ppl, time, pplArr) {
 
   createTimerObjects(minsPerPerson, pplArr);
   createPeoplesDivs();
+  // then call a function to add event listener to stopwatch area
+  stopwatchAreaListener();
 }
 
+// WORK IN PROGRESS - CURRENTLY OVERLAPS WITH FUNCTIONALITY OF OTHER FUNCTIONS EG BUTTON
+// stopwatchAreaListener = function(){
+//   console.log("stopwatchAreaListener")
+//   document.getElementById("stopwatch-area").addEventListener("click", x => x.target.parentElement.childNodes.forEach(y => {
+//     if(x.target.id !== y.id && x.target.id.includes("presenter")){
+//       y.classList.remove("selected")
+//       y.classList.add("normal")
+//     } else if (x.target.id === y.id && x.target.id.includes("presenter")){
+//       y.classList.remove("normal")
+//       y.classList.add("selected")
+//     }
+//   }));
+// }
+
+stopwatchAreaListener = function() {
+  console.log("stopwatchAreaListener");
+  document
+    .getElementById("stopwatch-area")
+    .addEventListener("click", function(x) {
+      if (x.target.id.includes("presenter")) {
+        drySelector(x.target);
+        /*
+      x.target.parentElement.childNodes.forEach(y => {
+        if(x.target.id !== y.id){
+          y.classList.remove("selected")
+          y.classList.add("normal")
+        } else if (x.target.id === y.id && y.id === timerState.userSelected){
+          y.classList.remove("selected")
+          y.classList.add("normal")
+          selectUserForTimer(y.id)
+        } else if (x.target.id === y.id){
+          y.classList.remove("normal")
+          y.classList.add("selected")
+          selectUserForTimer(y.id)
+        }
+      })
+      */
+      } else if (x.target.nodeName.toLowerCase() === "button") {
+        console.log("button clicked!");
+        if (x.target.innerText === "select") {
+          x.target.innerText = "deselect";
+        } else {
+          x.target.innerText = "select";
+        }
+
+        if (x.target.innerText === "deselect") {
+          console.log("deselect initiated");
+        }
+
+        x.target.parentElement.parentElement.childNodes.forEach(function(y) {
+          if (x.target.parentElement.id !== y.id) {
+            y.classList.remove("selected");
+            y.classList.add("normal");
+          } else if (x.target.parentElement.id === y.id) {
+            y.classList.remove("normal");
+            y.classList.add("selected");
+            selectUserForTimer(y.id);
+          }
+        });
+      }
+    });
+};
+
+// stopwatchAreaListener = function(){
+//   document.getElementById("stopwatch-area").addEventListener("click", x => x.target.parentElement.childNodes.forEach(y => console.log(y.classList)));
+// }
+
 // function to make objects to track peoples' time
-function createTimerObjects(mins, pplNames) {
+function createTimerObjects(timeMS, pplNames) {
   console.log("Run: createTimerObjects");
   pplNames.forEach((p, i) => {
     timerState["presenter_" + i] = {
       name: p,
-      timeAllocMS: mins * 60000,
+      timeAllocMS: timeMS,
       timeTakenMS: 0
     };
   });
@@ -141,14 +210,17 @@ function createPeopleTest(i) {
   var timerButton = document.createElement("button");
   var presenterName = document.createElement("h3");
   presenterDiv.classList.add("test-div");
+  presenterDiv.classList.add("normal");
   presenterDiv.id = "presenter_" + i;
   presenterName.innerText = timerState["presenter_" + i].name;
   timerButton.innerText = "select";
+  /*
   timerButton.onclick = function(e) {
     var userSel = e.target.parentElement.id;
     updateButtonText(userSel, timerState.userSelected);
-    selectUserForTimer(userSel);
+    // selectUserForTimer(userSel);
   };
+  */
   presenterDiv.appendChild(presenterName);
   presenterDiv.appendChild(timerButton);
   stopwatchArea.appendChild(presenterDiv);
@@ -190,6 +262,7 @@ formatTime = function(ms) {
   console.log(Math.floor(mins) + "m:" + secs + "s");
 };
 
+/*
 updateButtonText = function(selected, prevSelected) {
   // e.g. selected = "person_2", prevSelected = "person_0"
   console.log("Run: updateButtonText");
@@ -207,6 +280,14 @@ updateButtonText = function(selected, prevSelected) {
       .getElementsByTagName("button")[0].innerText = "select";
   }
 };
+*/
+
+/*
+updateButtonTextHelper = function(a, b) {
+  // this is to replace the "updateButtonText" function, for use inside "stopwatchAreaListener"
+
+}
+*/
 
 //
 //
@@ -237,3 +318,28 @@ function createSecondForm(ppl, time) {
 }
 
 */
+
+// CODE IS WAY TOO WET! Below, I should make a function to update the div style, button text and userSelected, with inputs being:
+// name of div, id of div?
+function drySelector(divClicked) {
+  console.log("drySelector called");
+  divClicked.parentElement.childNodes.forEach(function(div) {
+    if (div.id === divClicked.id) {
+      if (div.id === timerState.userSelected) {
+        div.classList.remove("selected");
+        div.classList.add("normal");
+        div.getElementsByTagName("button")[0].innerText = "select";
+        timerState.userSelected = undefined;
+      } else {
+        div.classList.remove("normal");
+        div.classList.add("selected");
+        div.getElementsByTagName("button")[0].innerText = "deselect";
+        timerState.userSelected = div.id;
+      }
+    } else {
+      div.classList.remove("selected");
+      div.classList.add("normal");
+      div.getElementsByTagName("button")[0].innerText = "select";
+    }
+  });
+}

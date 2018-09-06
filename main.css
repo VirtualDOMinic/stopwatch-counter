@@ -12,9 +12,11 @@ body {
 }
 
 .notice {
-    color: mediumvioletred;
     font-weight: bold;
     text-align: center;
+    font-size: 1.75rem;
+    color: #000000;
+    background-color: hotpink;
 }
 
 p {
@@ -66,11 +68,6 @@ button {
     /* put stuff here */
 }
 
-.notice {
-    font-size: 1.75rem;
-    color: #000000;
-    background-color: hotpink;
-}
 
 .test-div {
     width: 400px;
@@ -85,10 +82,8 @@ button {
 }
 
 div[id*='presenter_'] {
-    background-color: rgba(10, 10, 233, 0.15);
     padding: 1rem;
     margin: 0.5rem;
-    border-style: dotted;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -103,4 +98,15 @@ div[id*='presenter_'] {
 
 .hidden {
     display: none;
+}
+
+.selected {
+    border-style: double;
+    border-color: hotpink;
+    background-color: hotpink;
+}
+
+.normal {
+    background-color: rgba(10, 10, 233, 0.15);
+    border-style: dotted;
 }
