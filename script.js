@@ -16,17 +16,13 @@ var timerArea = document.getElementById("timer");
 
 var mainStartBtn = document.getElementById("main-timer-start");
 
-// current user selected. May make this part of a window.object instead
-// var userSelected = "";
-
-// Note to self...
 if (!window) {
   console.log("no window object! This scripts gonna fail");
 } else {
   console.log("woo theres a window!");
 }
 
-// Having a go at making timer object. Maybe add `people` var here
+// Timer "state" object, which is updated to include a key for each presenter, which has another object with presenter data/state 
 timerState = {
   userSelected: undefined,
   timerActive: false,
@@ -116,20 +112,6 @@ function createStopwatchArea(ppl, time, pplArr) {
   stopwatchAreaListener();
 }
 
-// WORK IN PROGRESS - CURRENTLY OVERLAPS WITH FUNCTIONALITY OF OTHER FUNCTIONS EG BUTTON
-// stopwatchAreaListener = function(){
-//   console.log("stopwatchAreaListener")
-//   document.getElementById("stopwatch-area").addEventListener("click", x => x.target.parentElement.childNodes.forEach(y => {
-//     if(x.target.id !== y.id && x.target.id.includes("presenter")){
-//       y.classList.remove("selected")
-//       y.classList.add("normal")
-//     } else if (x.target.id === y.id && x.target.id.includes("presenter")){
-//       y.classList.remove("normal")
-//       y.classList.add("selected")
-//     }
-//   }));
-// }
-
 stopwatchAreaListener = function() {
   console.log("stopwatchAreaListener");
   document
@@ -167,10 +149,6 @@ stopwatchAreaListener = function() {
     });
 };
 
-// stopwatchAreaListener = function(){
-//   document.getElementById("stopwatch-area").addEventListener("click", x => x.target.parentElement.childNodes.forEach(y => console.log(y.classList)));
-// }
-
 // function to make objects to track peoples' time
 function createTimerObjects(timeMS, pplNames) {
   console.log("Run: createTimerObjects");
@@ -202,13 +180,7 @@ function createPeopleTest(i) {
   presenterDiv.id = "presenter_" + i;
   presenterName.innerText = timerState["presenter_" + i].name;
   timerButton.innerText = "select";
-  /*
-  timerButton.onclick = function(e) {
-    var userSel = e.target.parentElement.id;
-    updateButtonText(userSel, timerState.userSelected);
-    // selectUserForTimer(userSel);
-  };
-  */
+
   presenterDiv.appendChild(presenterName);
   presenterDiv.appendChild(timerButton);
   stopwatchArea.appendChild(presenterDiv);
@@ -250,50 +222,15 @@ formatTime = function(ms) {
   console.log(Math.floor(mins) + "m:" + secs + "s");
 };
 
-/*
-updateButtonText = function(selected, prevSelected) {
-  // e.g. selected = "person_2", prevSelected = "person_0"
-  console.log("Run: updateButtonText");
-  document
-    .getElementById(selected)
-    .getElementsByTagName("button")[0].innerText = "deselect";
-  if (
-    prevSelected !== undefined &&
-    (selected !== prevSelected ||
-      document.getElementById(selected).getElementsByTagName("button")[0]
-        .innerText === "deselect")
-  ) {
-    document
-      .getElementById(prevSelected)
-      .getElementsByTagName("button")[0].innerText = "select";
-  }
-};
-*/
 
-/*
-updateButtonTextHelper = function(a, b) {
-  // this is to replace the "updateButtonText" function, for use inside "stopwatchAreaListener"
-
-}
-*/
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
 // Future plans...
 
 // on form reset, check put the last used vals for number of people, total time, and names into form inputs
 // edit: ^ this may not be necessary!
 
 
-// CODE IS WAY TOO WET! Below, I should make a function to update the div style, button text and userSelected, with inputs being:
-// name of div, id of div?
+// CODE IS (WAS?) WAY TOO WET! Below, I'm making a function to update the div style, button text and userSelected, with input being the presenter div that has been clicked:
+
 function drySelector(divClicked) {
   console.log("drySelector called");
   divClicked.parentElement.childNodes.forEach(function(div) {
