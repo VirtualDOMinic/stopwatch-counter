@@ -137,22 +137,6 @@ stopwatchAreaListener = function() {
     .addEventListener("click", function(x) {
       if (x.target.id.includes("presenter")) {
         drySelector(x.target);
-        /*
-      x.target.parentElement.childNodes.forEach(y => {
-        if(x.target.id !== y.id){
-          y.classList.remove("selected")
-          y.classList.add("normal")
-        } else if (x.target.id === y.id && y.id === timerState.userSelected){
-          y.classList.remove("selected")
-          y.classList.add("normal")
-          selectUserForTimer(y.id)
-        } else if (x.target.id === y.id){
-          y.classList.remove("normal")
-          y.classList.add("selected")
-          selectUserForTimer(y.id)
-        }
-      })
-      */
       } else if (x.target.nodeName.toLowerCase() === "button") {
         console.log("button clicked!");
         if (x.target.innerText === "select") {
@@ -175,7 +159,11 @@ stopwatchAreaListener = function() {
             selectUserForTimer(y.id);
           }
         });
-      }
+      } else if (x.target.parentElement.id.includes("presenter")){
+        // this else if statement is to handle any div children that aren't the button
+        drySelector(x.target.parentElement)
+      } 
+      
     });
 };
 
@@ -303,21 +291,6 @@ updateButtonTextHelper = function(a, b) {
 // on form reset, check put the last used vals for number of people, total time, and names into form inputs
 // edit: ^ this may not be necessary!
 
-/* 
-function createSecondForm(ppl, time) {
-
-    welcome.innerText = "";
-
-    // welcome.innerText = "There are " + ppl + " people, and each person has " + (time / ppl).toPrecision(2) + " minutes to present";
-
-    //create final inputs
-    for (var i = 0; i < people; i++) {
-        console.log("hi");
-    }
-
-}
-
-*/
 
 // CODE IS WAY TOO WET! Below, I should make a function to update the div style, button text and userSelected, with inputs being:
 // name of div, id of div?
