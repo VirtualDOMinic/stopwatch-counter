@@ -153,7 +153,7 @@ stopwatchAreaListener = function() {
 function createTimerObjects(timeMS, pplNames) {
   console.log("Run: createTimerObjects");
   pplNames.forEach((p, i) => {
-    timerState["presenter_" + i] = {
+    timerState["presenter_" + (i + 1)] = {
       name: p,
       timeAllocMS: timeMS,
       timeTakenMS: 0
@@ -177,8 +177,8 @@ function createPeopleTest(i) {
   var presenterName = document.createElement("h3");
   presenterDiv.classList.add("test-div");
   presenterDiv.classList.add("normal");
-  presenterDiv.id = "presenter_" + i;
-  presenterName.innerText = timerState["presenter_" + i].name;
+  presenterDiv.id = "presenter_" + (i + 1);
+  presenterName.innerText = timerState["presenter_" + (i + 1)].name;
   timerButton.innerText = "select";
 
   presenterDiv.appendChild(presenterName);
