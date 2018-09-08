@@ -141,6 +141,7 @@ function createStopwatchArea(ppl, time, pplArr) {
     convertToMinsSecs(time / ppl);
 
   timerArea.classList.remove("hidden"); // display main timer
+  mainTimerDisplay.innerText = convertToMinsSecs(time);
   areaIntro.classList.add("notice");
   noticeArea.appendChild(areaIntro);
 
