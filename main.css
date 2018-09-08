@@ -89,7 +89,7 @@ div[id*='presenter_'] {
     align-items: center;
 }
 
-#timer {
+#timer, .timer {
     font-size: 4.5rem;
     text-align: center;
     line-height: 6rem;
