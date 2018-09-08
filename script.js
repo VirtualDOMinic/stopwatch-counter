@@ -132,9 +132,6 @@ function createStopwatchArea(ppl, time, pplArr) {
   // create "overview" text description
   var areaIntro = document.createElement("p");
 
-  // parseFloat is to avoid using scientific/exp (e) notation
-  // var minsPerPerson = parseFloat((time / (ppl * 60000)).toPrecision(2));
-
   areaIntro.textContent =
     "There are " +
     ppl +
@@ -158,7 +155,7 @@ stopwatchAreaListener = function() {
   document
     .getElementById("stopwatch-area")
     .addEventListener("click", function(x) {
-      if (x.target.id.includes("presenter")) {
+      if (x.target.id.includes("presenter") && !x.target.id.includes("timer")) {
         divSelectionHandler(x.target);
       } else if (x.target.parentElement.id.includes("presenter")){
         // this else if statement is to handle any div children
@@ -209,8 +206,6 @@ function createPeopleTest(i) {
   presenterDiv.appendChild(presenterTime);
   presenterDiv.appendChild(timerButton);
   stopwatchArea.appendChild(presenterDiv);
-
-  console.log("finished createPeopleTest");
 }
 
 selectUserForTimer = function(usr) {
@@ -222,38 +217,6 @@ selectUserForTimer = function(usr) {
     timerState.userSelected = usr;
   }
 };
-
-/*
-basicTimer = function() {
-  console.log("Run: basicTimer");
-  var timerSched = window.setInterval(timerCB, 1000);
-  console.log(timerSched, "timersched ID");
-};
-
-timerCB = function() {
-  console.log("Run: timerCB");
-  var timeTest = 795000;
-  // 13 mins 15 seconds
-  formatTime(timeTest);
-};
-
-formatTime = function(ms) {
-  console.log("Run: formatTime");
-  var mins = 0;
-  var secs = 0;
-  mins += ms / 60000;
-  secs += (ms % 60000) / 1000;
-  console.log(Math.floor(mins) + "m:" + secs + "s");
-};
-*/
-
-// Future plans...
-
-// on form reset, check put the last used vals for number of people, total time, and names into form inputs
-// edit: ^ this may not be necessary!
-
-
-// CODE IS (WAS?) WAY TOO WET! Below, I'm making a function to update the div style, button text and userSelected, with input being the presenter div that has been clicked:
 
 function divSelectionHandler(divClicked) {
   console.log("divSelectionHandler called");
