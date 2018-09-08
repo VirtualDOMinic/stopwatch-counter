@@ -53,9 +53,7 @@ firstForm.addEventListener("submit", function(event) {
     timerState.timeLeftMS = Number(timeInputVal) * 60 * 1000;
     console.log(peoplesNamesArr);
 
-    // future plan: run function to clear window contents and add options to put names of people. Cleaner. See for loop in createSecontForm function that I commented out
-
-    // populate stopwatch area
+    // populate stopwatch area after clearing it
     stopwatchArea.innerText = "";
 
     createStopwatchArea(peoplesNamesArr.length, timerState.timeLeftMS, peoplesNamesArr);
@@ -63,7 +61,7 @@ firstForm.addEventListener("submit", function(event) {
 });
 
 function timerFunc() {
-  // placeholder func. Need to add functionality (will call timer display DOM functions and update timer object)
+  // this is the function called every 1000 ms by setInterval
   console.log("timerFunc called");
 
   if(timerState.timerActive === true){
@@ -136,7 +134,7 @@ function createStopwatchArea(ppl, time, pplArr) {
   var areaIntro = document.createElement("p");
 
   // parseFloat is to avoid using scientific/exp (e) notation
-  var minsPerPerson = parseFloat((time / ppl).toPrecision(2));
+  // var minsPerPerson = parseFloat((time / (ppl * 60000)).toPrecision(2));
 
   areaIntro.textContent =
     "There are " +
@@ -144,14 +142,13 @@ function createStopwatchArea(ppl, time, pplArr) {
     " people (" +
     pplArr.join(", ") +
     "), and each person should aim to present for " +
-    (minsPerPerson / 60000).toPrecision(2) +
-    " minutes";
+    convertToMinsSecs(time / ppl);
 
   timerArea.classList.remove("hidden"); // display main timer
   areaIntro.classList.add("notice");
   noticeArea.appendChild(areaIntro);
 
-  createTimerObjects(minsPerPerson, pplArr);
+  createTimerObjects(time / ppl, pplArr);
   createPeoplesDivs(ppl);
   // then call a function to add event listener to stopwatch area
   stopwatchAreaListener();
@@ -175,6 +172,7 @@ stopwatchAreaListener = function() {
 // function to make objects to track peoples' time
 function createTimerObjects(timeMS, pplNames) {
   console.log("Run: createTimerObjects");
+  pplNum = pplNames.length;
   pplNames.forEach((p, i) => {
     timerState["presenter_" + (i + 1)] = {
       name: p,
@@ -226,6 +224,7 @@ selectUserForTimer = function(usr) {
   }
 };
 
+/*
 basicTimer = function() {
   console.log("Run: basicTimer");
   var timerSched = window.setInterval(timerCB, 1000);
@@ -247,7 +246,7 @@ formatTime = function(ms) {
   secs += (ms % 60000) / 1000;
   console.log(Math.floor(mins) + "m:" + secs + "s");
 };
-
+*/
 
 // Future plans...
 
