@@ -94,7 +94,8 @@ function eventListenerCB(event) {
     createStopwatchArea(peoplesNamesArr.length, timerState.timeLeftMS, peoplesNamesArr);
   }
 
-  timer.scrollIntoView()
+  // scroll up to show notice, timer, etc
+  document.querySelector(".notice").scrollIntoView()
 }
 
 function timerFunc() {
@@ -143,7 +144,10 @@ function convertToMinsSecs(ms){
 }
 
 // main timer event listener function
-mainStartBtn.addEventListener("click", function(e) {
+mainStartBtn.addEventListener("click", mainStartBtnCB);
+
+function mainStartBtnCB(e) {
+
   // only create one setInterval. Hacky way to do it but it works fine, and I can't think of any obvious scenarios where this falls down...
   // Easy alterntive is to create the setInterval on load, and never call it
   if(e.target.textContent === "Start main timer"){
@@ -159,7 +163,7 @@ mainStartBtn.addEventListener("click", function(e) {
     e.target.textContent = "resume"
   }
 
-  });
+}
 
 // function to create stopwatch area
 // Needs refactoring!
@@ -275,3 +279,26 @@ function divSelectionHandler(divClicked) {
     }
   });
 }
+
+// keyboard control - assuming up to 9 presenters
+var numStrArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+document.addEventListener("keydown", function(e){
+  if(
+    numStrArr.includes(e.key)
+    && !e.key.ctrlKey 
+    && e.srcElement.nodeName.toLowerCase() !== "input"
+  ){
+    var presenterToSelect = "presenter_" + e.key;
+    if(document.getElementById(presenterToSelect)){
+      divSelectionHandler(document.getElementById(presenterToSelect))
+    }
+  }
+  else if(
+    e.key === " " 
+    && e.srcElement.nodeName.toLowerCase() === "body"
+  ){
+    // simulate click instead of calling mainStartBtnCB because the event needs to be passed in
+    mainStartBtn.click();
+  }
+})
