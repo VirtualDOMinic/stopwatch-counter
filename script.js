@@ -17,6 +17,9 @@ var timerArea = document.getElementById("timer");
 var mainStartBtn = document.getElementById("main-timer-start-btn");
 var mainTimerDisplay = document.getElementById("main-timer-display");
 
+// global intervalID so it can easily be stopped
+var intervalID;
+
 if (!window) {
   console.log("no window object! This scripts gonna fail");
 } else {
@@ -49,11 +52,18 @@ function eventListenerCB(event) {
       timeLeftMS: 0,
     }
 
+    // clear top description of people and time per presenter
     noticeArea.textContent = "";
 
-    //shouldn't be necessary (actually I think it is!):
+    //remove old eventListener to avoid it being called twice
     stopwatchArea
     .removeEventListener("click", stopwatchAreaListenerCB)
+
+    // stop interval func
+    clearInterval(intervalID);
+
+    // reset start button text
+    mainStartBtn.textContent = "Start main timer"
   }
 
   timerState.created = true;
@@ -83,6 +93,8 @@ function eventListenerCB(event) {
 
     createStopwatchArea(peoplesNamesArr.length, timerState.timeLeftMS, peoplesNamesArr);
   }
+
+  timer.scrollIntoView()
 }
 
 function timerFunc() {
@@ -135,7 +147,7 @@ mainStartBtn.addEventListener("click", function(e) {
   // only create one setInterval. Hacky way to do it but it works fine, and I can't think of any obvious scenarios where this falls down...
   // Easy alterntive is to create the setInterval on load, and never call it
   if(e.target.textContent === "Start main timer"){
-    var intervalID = window.setInterval(timerFunc, 1000);
+    intervalID = window.setInterval(timerFunc, 1000);
   }
   
   //activate timer via timerState object (timerFunc relies on this)
