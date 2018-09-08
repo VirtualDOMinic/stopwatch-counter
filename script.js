@@ -67,22 +67,53 @@ firstForm.addEventListener("submit", function(event) {
 
 function timerFunc() {
   // placeholder func. Need to add functionality (will call timer display DOM functions and update timer object)
-  console.log("timer func being called");
+  console.log("timerFunc called");
+
+  if(timerState.timerActive === true){
+    updateTimerStateObj();
+    updateTimerDisplay();
+  }
 }
 
 function updateTimerStateObj() {
   // placeholder func to update timerState.timeLeft value, and the specific presenter's time taken
-  if (timerState.timerActive === false) {
-    console.log("Timer apparently not active");
+  timerState.timeLeftMS -= 1000;
+
+  if (timerState.userSelected){
+    timerState[timerState.userSelected].timeTakenMS += 1000;
   }
 }
 
-// main timer event listener function
-mainStartBtn.addEventListener("click", function() {
-  var intervalID = window.setInterval(timerFunc, 1000);
+function updateTimerDisplay() {
+  console.log("updateTimerDisplay called")
+}
 
-  console.log("main start btn working!");
-});
+// convert ms value into a string of "mm:ss"
+function convertToMinsSecs(ms){
+  var formattedTime = [Math.floor(ms / 60000)]
+  // formattedTime.push(Math.floor(ms / 60000))
+  formattedTime.push((ms % 60000)/1000)
+  return formattedTime.join(":")
+}
+
+// main timer event listener function
+mainStartBtn.addEventListener("click", function(e) {
+  // only create one setInterval. Hacky way to do it but it works fine, and I can't think of any obvious scenarios where this falls down...
+  // Easy alterntive is to create the setInterval on load, and never call it
+  if(e.target.innerText === "Start main timer"){
+    var intervalID = window.setInterval(timerFunc, 1000);
+  }
+  
+  //activate timer via timerState object (timerFunc relies on this)
+  timerState.timerActive = !timerState.timerActive;
+
+  if(timerState.timerActive === true){
+    e.target.innerText = "pause"
+  } else {
+    e.target.innerText = "resume"
+  }
+
+  });
 
 // function to create stopwatch area
 function createStopwatchArea(ppl, time, pplArr) {
