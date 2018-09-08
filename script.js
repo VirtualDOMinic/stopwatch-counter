@@ -148,7 +148,7 @@ function createStopwatchArea(ppl, time, pplArr) {
   noticeArea.appendChild(areaIntro);
 
   createTimerObjects(minsPerPerson, pplArr);
-  createPeoplesDivs();
+  createPeoplesDivs(ppl);
   // then call a function to add event listener to stopwatch area
   stopwatchAreaListener();
 }
@@ -203,7 +203,7 @@ function createTimerObjects(timeMS, pplNames) {
 }
 
 // function to create divs for each person, eventually displaying time left, time taken and button to start/stop
-function createPeoplesDivs() {
+function createPeoplesDivs(people) {
   console.log("Run: createPeopleDivs");
   // could use forEach here but not sure about browser support
   for (var i = 0; i < people; i++) {
