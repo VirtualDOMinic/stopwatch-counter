@@ -83,7 +83,7 @@ function updateTimerStateObj() {
 
 function updateTimerDisplay() {
   if (timerState.userSelected){
-    document.getElementById(timerState.userSelected)
+    document.getElementById(timerState.userSelected + "_timer")
     .innerText = 
     convertToMinsSecs(timerState[timerState.userSelected].timeTakenMS);
   }
@@ -216,13 +216,18 @@ function createPeopleTest(i) {
   var presenterDiv = document.createElement("div");
   var timerButton = document.createElement("button");
   var presenterName = document.createElement("h3");
+  var presenterTime = document.createElement("span");
   presenterDiv.classList.add("test-div");
   presenterDiv.classList.add("normal");
   presenterDiv.id = "presenter_" + (i + 1);
   presenterName.innerText = timerState["presenter_" + (i + 1)].name;
   timerButton.innerText = "select";
+  presenterTime.classList.add("timer");
+  presenterTime.id = "presenter_" + (i + 1) + "_timer";
+  presenterTime.innerText = "0:00"
 
   presenterDiv.appendChild(presenterName);
+  presenterDiv.appendChild(presenterTime);
   presenterDiv.appendChild(timerButton);
   stopwatchArea.appendChild(presenterDiv);
 
