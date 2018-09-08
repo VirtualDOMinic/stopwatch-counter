@@ -15,7 +15,7 @@ var noticeArea = document.getElementById("notice-area");
 var timerArea = document.getElementById("timer");
 
 var mainStartBtn = document.getElementById("main-timer-start-btn");
-var mainTimerDisplay = document.getElementById("main-timer-display")
+var mainTimerDisplay = document.getElementById("main-timer-display");
 
 if (!window) {
   console.log("no window object! This scripts gonna fail");
@@ -24,16 +24,40 @@ if (!window) {
 }
 
 // Timer "state" object, which is updated to include a key for each presenter, which has another object with presenter data/state 
-timerState = {
+var timerState = {
+  created: false,
   userSelected: undefined,
   timerActive: false,
   timeLeftMS: 0,
 };
 
 // first submit
-firstForm.addEventListener("submit", function(event) {
+firstForm.addEventListener("submit", eventListenerCB);
+
+function eventListenerCB(event) {
+
   event.preventDefault();
   console.log("Run: first form event listener");
+
+  // clear old data on subsequent runs
+  if(timerState.created){
+    console.log("timerState refreshed")
+    timerState = {
+      created: false,
+      userSelected: undefined,
+      timerActive: false,
+      timeLeftMS: 0,
+    }
+
+    noticeArea.textContent = "";
+
+    //shouldn't be necessary (actually I think it is!):
+    stopwatchArea
+    .removeEventListener("click", stopwatchAreaListenerCB)
+  }
+
+  timerState.created = true;
+
   var peopleInputVal = numberOfPeople.value;
   var timeInputVal = timeInput.value;
   var peoplesNamesArr = namesInput.value.split(", ");
@@ -59,7 +83,7 @@ firstForm.addEventListener("submit", function(event) {
 
     createStopwatchArea(peoplesNamesArr.length, timerState.timeLeftMS, peoplesNamesArr);
   }
-});
+}
 
 function timerFunc() {
   // this is the function called every 1000 ms by setInterval
@@ -135,9 +159,9 @@ function createStopwatchArea(ppl, time, pplArr) {
   areaIntro.textContent =
     "There are " +
     ppl +
-    " people (" +
+    " people presenting (" +
     pplArr.join(", ") +
-    "), and each person should aim to present for " +
+    "), and each presenter should aim to present for " +
     convertToMinsSecs(time / ppl);
 
   timerArea.classList.remove("hidden"); // display main timer
@@ -153,18 +177,17 @@ function createStopwatchArea(ppl, time, pplArr) {
 
 stopwatchAreaListener = function() {
   console.log("stopwatchAreaListener");
-  document
-    .getElementById("stopwatch-area")
-    .addEventListener("click", function(x) {
-      if (x.target.id.includes("presenter") && !x.target.id.includes("timer")) {
-        divSelectionHandler(x.target);
-      } else if (x.target.parentElement.id.includes("presenter")){
-        // this else if statement is to handle any div children
-        divSelectionHandler(x.target.parentElement)
-      } 
-      
-    });
+  stopwatchArea.addEventListener("click", stopwatchAreaListenerCB);
 };
+
+function stopwatchAreaListenerCB(x) {
+  if (x.target.id.includes("presenter") && !x.target.id.includes("timer")) {
+    divSelectionHandler(x.target);
+  } else if (x.target.parentElement.id.includes("presenter")){
+    // this else if statement is to handle any div children
+    divSelectionHandler(x.target.parentElement)
+  } 
+}
 
 // function to make objects to track peoples' time
 function createTimerObjects(timeMS, pplNames) {
