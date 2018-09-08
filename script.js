@@ -88,9 +88,13 @@ function updateTimerDisplay() {
     convertToMinsSecs(timerState[timerState.userSelected].timeTakenMS);
   }
 
-  document.getElementById("main-time-display")
-  .innerText = convertToMinsSecs(timerState.timeLeftMS);
-
+  if(timerState.timeLeftMS < 0){
+    document.getElementById("main-time-display")
+    .innerText = "Time up!";
+  } else {
+    document.getElementById("main-time-display")
+    .innerText = convertToMinsSecs(timerState.timeLeftMS);
+  }
   console.log("updateTimerDisplay called")
 }
 
@@ -160,30 +164,8 @@ stopwatchAreaListener = function() {
     .addEventListener("click", function(x) {
       if (x.target.id.includes("presenter")) {
         drySelector(x.target);
-      } else if (x.target.nodeName.toLowerCase() === "button") {
-        console.log("button clicked!");
-        if (x.target.innerText === "select") {
-          x.target.innerText = "deselect";
-        } else {
-          x.target.innerText = "select";
-        }
-
-        if (x.target.innerText === "deselect") {
-          console.log("deselect initiated");
-        }
-
-        x.target.parentElement.parentElement.childNodes.forEach(function(y) {
-          if (x.target.parentElement.id !== y.id) {
-            y.classList.remove("selected");
-            y.classList.add("normal");
-          } else if (x.target.parentElement.id === y.id) {
-            y.classList.remove("normal");
-            y.classList.add("selected");
-            selectUserForTimer(y.id);
-          }
-        });
       } else if (x.target.parentElement.id.includes("presenter")){
-        // this else if statement is to handle any div children that aren't the button
+        // this else if statement is to handle any div children
         drySelector(x.target.parentElement)
       } 
       
@@ -249,8 +231,6 @@ basicTimer = function() {
   var timerSched = window.setInterval(timerCB, 1000);
   console.log(timerSched, "timersched ID");
 };
-
-var dateNow = Date.now();
 
 timerCB = function() {
   console.log("Run: timerCB");
