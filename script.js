@@ -85,14 +85,26 @@ function updateTimerStateObj() {
 }
 
 function updateTimerDisplay() {
+  if (timerState.userSelected){
+    document.getElementById(timerState.userSelected)
+    .innerText = 
+    convertToMinsSecs(timerState[timerState.userSelected].timeTakenMS);
+  }
+
+  document.getElementById("main-time-display")
+  .innerText = convertToMinsSecs(timerState.timeLeftMS);
+
   console.log("updateTimerDisplay called")
 }
 
 // convert ms value into a string of "mm:ss"
 function convertToMinsSecs(ms){
   var formattedTime = [Math.floor(ms / 60000)]
-  // formattedTime.push(Math.floor(ms / 60000))
-  formattedTime.push((ms % 60000)/1000)
+  // Add leading "0" to numbers under 10
+  formattedTime.push(
+    ('0' + ((ms % 60000)/1000))
+    .slice(-2)
+  )
   return formattedTime.join(":")
 }
 
