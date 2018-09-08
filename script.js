@@ -194,7 +194,6 @@ function createPeopleTest(i) {
   var timerButton = document.createElement("button");
   var presenterName = document.createElement("h3");
   var presenterTime = document.createElement("span");
-  presenterDiv.classList.add("test-div");
   presenterDiv.classList.add("normal");
   presenterDiv.id = "presenter_" + (i + 1);
   presenterName.textContent = timerState["presenter_" + (i + 1)].name;
