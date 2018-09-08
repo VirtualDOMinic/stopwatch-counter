@@ -26,11 +26,8 @@ if (!window) {
 timerState = {
   userSelected: undefined,
   timerActive: false,
-  timeLeftMS: 0
+  timeLeftMS: 0,
 };
-
-// might not need these as globals
-var people = 0;
 
 // first submit
 firstForm.addEventListener("submit", function(event) {
@@ -52,7 +49,7 @@ firstForm.addEventListener("submit", function(event) {
     welcomeMsg.classList.add("notice");
   } else {
     welcomeMsg.innerText = "";
-    people = Number(peopleInputVal);
+    timerStatepeople = Number(peopleInputVal);
     timerState.timeLeftMS = Number(timeInputVal) * 60 * 1000;
     console.log(peoplesNamesArr);
 
@@ -61,7 +58,7 @@ firstForm.addEventListener("submit", function(event) {
     // populate stopwatch area
     stopwatchArea.innerText = "";
 
-    createStopwatchArea(people, timerState.timeLeftMS, peoplesNamesArr);
+    createStopwatchArea(peoplesNamesArr.length, timerState.timeLeftMS, peoplesNamesArr);
   }
 });
 
@@ -128,6 +125,7 @@ mainStartBtn.addEventListener("click", function(e) {
   });
 
 // function to create stopwatch area
+// Needs refactoring!
 function createStopwatchArea(ppl, time, pplArr) {
   console.log("Run: createStopwatchArea");
   // create "overview" text description
