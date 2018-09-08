@@ -14,7 +14,8 @@ var stopwatchArea = document.getElementById("stopwatch-area");
 var noticeArea = document.getElementById("notice-area");
 var timerArea = document.getElementById("timer");
 
-var mainStartBtn = document.getElementById("main-timer-start");
+var mainStartBtn = document.getElementById("main-timer-start-btn");
+var mainTimerDisplay = document.getElementById("main-timer-display")
 
 if (!window) {
   console.log("no window object! This scripts gonna fail");
@@ -87,11 +88,9 @@ function updateTimerDisplay() {
   }
 
   if(timerState.timeLeftMS < 0){
-    document.getElementById("main-time-display")
-    .innerText = "Time up!";
+    mainTimerDisplay.innerText = "Time up!";
   } else {
-    document.getElementById("main-time-display")
-    .innerText = convertToMinsSecs(timerState.timeLeftMS);
+    mainTimerDisplay.innerText = convertToMinsSecs(timerState.timeLeftMS);
   }
   console.log("updateTimerDisplay called")
 }
@@ -160,10 +159,10 @@ stopwatchAreaListener = function() {
     .getElementById("stopwatch-area")
     .addEventListener("click", function(x) {
       if (x.target.id.includes("presenter")) {
-        drySelector(x.target);
+        divSelectionHandler(x.target);
       } else if (x.target.parentElement.id.includes("presenter")){
         // this else if statement is to handle any div children
-        drySelector(x.target.parentElement)
+        divSelectionHandler(x.target.parentElement)
       } 
       
     });
@@ -256,8 +255,8 @@ formatTime = function(ms) {
 
 // CODE IS (WAS?) WAY TOO WET! Below, I'm making a function to update the div style, button text and userSelected, with input being the presenter div that has been clicked:
 
-function drySelector(divClicked) {
-  console.log("drySelector called");
+function divSelectionHandler(divClicked) {
+  console.log("divSelectionHandler called");
   divClicked.parentElement.childNodes.forEach(function(div) {
     if (div.id === divClicked.id) {
       if (div.id === timerState.userSelected) {
