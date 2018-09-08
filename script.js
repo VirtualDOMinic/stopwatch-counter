@@ -297,7 +297,10 @@ document.addEventListener("keydown", function(e){
   else if(
     e.key === " " 
     && e.srcElement.nodeName.toLowerCase() === "body"
+    && !timer.classList.contains("hidden")
   ){
+    // stop space bar from scrolling page
+    e.preventDefault();
     // simulate click instead of calling mainStartBtnCB because the event needs to be passed in
     mainStartBtn.click();
   }
