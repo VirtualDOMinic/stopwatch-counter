@@ -15,7 +15,10 @@ var noticeArea = document.getElementById("notice-area");
 var timerArea = document.getElementById("timer");
 
 var mainStartBtn = document.getElementById("main-timer-start-btn");
-var mainTimerDisplay = document.getElementById("main-timer-display")
+var mainTimerDisplay = document.getElementById("main-timer-display");
+
+// global intervalID so it can easily be stopped
+var intervalID;
 
 if (!window) {
   console.log("no window object! This scripts gonna fail");
@@ -24,16 +27,47 @@ if (!window) {
 }
 
 // Timer "state" object, which is updated to include a key for each presenter, which has another object with presenter data/state 
-timerState = {
+var timerState = {
+  created: false,
   userSelected: undefined,
   timerActive: false,
   timeLeftMS: 0,
 };
 
 // first submit
-firstForm.addEventListener("submit", function(event) {
+firstForm.addEventListener("submit", eventListenerCB);
+
+function eventListenerCB(event) {
+
   event.preventDefault();
   console.log("Run: first form event listener");
+
+  // clear old data on subsequent runs
+  if(timerState.created){
+    console.log("timerState refreshed")
+    timerState = {
+      created: false,
+      userSelected: undefined,
+      timerActive: false,
+      timeLeftMS: 0,
+    }
+
+    // clear top description of people and time per presenter
+    noticeArea.textContent = "";
+
+    //remove old eventListener to avoid it being called twice
+    stopwatchArea
+    .removeEventListener("click", stopwatchAreaListenerCB)
+
+    // stop interval func
+    clearInterval(intervalID);
+
+    // reset start button text
+    mainStartBtn.textContent = "Start main timer"
+  }
+
+  timerState.created = true;
+
   var peopleInputVal = numberOfPeople.value;
   var timeInputVal = timeInput.value;
   var peoplesNamesArr = namesInput.value.split(", ");
@@ -59,7 +93,10 @@ firstForm.addEventListener("submit", function(event) {
 
     createStopwatchArea(peoplesNamesArr.length, timerState.timeLeftMS, peoplesNamesArr);
   }
-});
+
+  // scroll up to show notice, timer, etc
+  document.querySelector(".notice").scrollIntoView()
+}
 
 function timerFunc() {
   // this is the function called every 1000 ms by setInterval
@@ -107,11 +144,14 @@ function convertToMinsSecs(ms){
 }
 
 // main timer event listener function
-mainStartBtn.addEventListener("click", function(e) {
+mainStartBtn.addEventListener("click", mainStartBtnCB);
+
+function mainStartBtnCB(e) {
+
   // only create one setInterval. Hacky way to do it but it works fine, and I can't think of any obvious scenarios where this falls down...
   // Easy alterntive is to create the setInterval on load, and never call it
   if(e.target.textContent === "Start main timer"){
-    var intervalID = window.setInterval(timerFunc, 1000);
+    intervalID = window.setInterval(timerFunc, 1000);
   }
   
   //activate timer via timerState object (timerFunc relies on this)
@@ -123,7 +163,7 @@ mainStartBtn.addEventListener("click", function(e) {
     e.target.textContent = "resume"
   }
 
-  });
+}
 
 // function to create stopwatch area
 // Needs refactoring!
@@ -135,9 +175,9 @@ function createStopwatchArea(ppl, time, pplArr) {
   areaIntro.textContent =
     "There are " +
     ppl +
-    " people (" +
+    " people presenting (" +
     pplArr.join(", ") +
-    "), and each person should aim to present for " +
+    "), and each presenter should aim to present for " +
     convertToMinsSecs(time / ppl);
 
   timerArea.classList.remove("hidden"); // display main timer
@@ -153,18 +193,17 @@ function createStopwatchArea(ppl, time, pplArr) {
 
 stopwatchAreaListener = function() {
   console.log("stopwatchAreaListener");
-  document
-    .getElementById("stopwatch-area")
-    .addEventListener("click", function(x) {
-      if (x.target.id.includes("presenter") && !x.target.id.includes("timer")) {
-        divSelectionHandler(x.target);
-      } else if (x.target.parentElement.id.includes("presenter")){
-        // this else if statement is to handle any div children
-        divSelectionHandler(x.target.parentElement)
-      } 
-      
-    });
+  stopwatchArea.addEventListener("click", stopwatchAreaListenerCB);
 };
+
+function stopwatchAreaListenerCB(x) {
+  if (x.target.id.includes("presenter") && !x.target.id.includes("timer")) {
+    divSelectionHandler(x.target);
+  } else if (x.target.parentElement.id.includes("presenter")){
+    // this else if statement is to handle any div children
+    divSelectionHandler(x.target.parentElement)
+  } 
+}
 
 // function to make objects to track peoples' time
 function createTimerObjects(timeMS, pplNames) {
@@ -240,3 +279,26 @@ function divSelectionHandler(divClicked) {
     }
   });
 }
+
+// keyboard control - assuming up to 9 presenters
+var numStrArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+document.addEventListener("keydown", function(e){
+  if(
+    numStrArr.includes(e.key)
+    && !e.key.ctrlKey 
+    && e.srcElement.nodeName.toLowerCase() !== "input"
+  ){
+    var presenterToSelect = "presenter_" + e.key;
+    if(document.getElementById(presenterToSelect)){
+      divSelectionHandler(document.getElementById(presenterToSelect))
+    }
+  }
+  else if(
+    e.key === " " 
+    && e.srcElement.nodeName.toLowerCase() === "body"
+  ){
+    // simulate click instead of calling mainStartBtnCB because the event needs to be passed in
+    mainStartBtn.click();
+  }
+})
