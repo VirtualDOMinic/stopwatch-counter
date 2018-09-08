@@ -40,22 +40,22 @@ firstForm.addEventListener("submit", function(event) {
 
   //   input validation
   if (peopleInputVal.match(/[^0-9]/g) || timeInputVal.match(/[^0-9]/g)) {
-    stopwatchArea.innerText = "";
-    welcomeMsg.innerText = "Please check your number inputs! Thanks";
+    stopwatchArea.textContent = "";
+    welcomeMsg.textContent = "Please check your number inputs! Thanks";
     welcomeMsg.classList.add("notice");
   } else if (peoplesNamesArr.length != peopleInputVal) {
-    stopwatchArea.innerText = "";
-    welcomeMsg.innerText =
+    stopwatchArea.textContent = "";
+    welcomeMsg.textContent =
       "Please ensure that the number of names that you input matches the number of people presenting";
     welcomeMsg.classList.add("notice");
   } else {
-    welcomeMsg.innerText = "";
+    welcomeMsg.textContent = "";
     timerStatepeople = Number(peopleInputVal);
     timerState.timeLeftMS = Number(timeInputVal) * 60 * 1000;
     console.log(peoplesNamesArr);
 
     // populate stopwatch area after clearing it
-    stopwatchArea.innerText = "";
+    stopwatchArea.textContent = "";
 
     createStopwatchArea(peoplesNamesArr.length, timerState.timeLeftMS, peoplesNamesArr);
   }
@@ -83,14 +83,14 @@ function updateTimerStateObj() {
 function updateTimerDisplay() {
   if (timerState.userSelected){
     document.getElementById(timerState.userSelected + "_timer")
-    .innerText = 
+    .textContent = 
     convertToMinsSecs(timerState[timerState.userSelected].timeTakenMS);
   }
 
   if(timerState.timeLeftMS < 0){
-    mainTimerDisplay.innerText = "Time up!";
+    mainTimerDisplay.textContent = "Time up!";
   } else {
-    mainTimerDisplay.innerText = convertToMinsSecs(timerState.timeLeftMS);
+    mainTimerDisplay.textContent = convertToMinsSecs(timerState.timeLeftMS);
   }
   console.log("updateTimerDisplay called")
 }
@@ -110,7 +110,7 @@ function convertToMinsSecs(ms){
 mainStartBtn.addEventListener("click", function(e) {
   // only create one setInterval. Hacky way to do it but it works fine, and I can't think of any obvious scenarios where this falls down...
   // Easy alterntive is to create the setInterval on load, and never call it
-  if(e.target.innerText === "Start main timer"){
+  if(e.target.textContent === "Start main timer"){
     var intervalID = window.setInterval(timerFunc, 1000);
   }
   
@@ -118,9 +118,9 @@ mainStartBtn.addEventListener("click", function(e) {
   timerState.timerActive = !timerState.timerActive;
 
   if(timerState.timerActive === true){
-    e.target.innerText = "pause"
+    e.target.textContent = "pause"
   } else {
-    e.target.innerText = "resume"
+    e.target.textContent = "resume"
   }
 
   });
@@ -141,7 +141,7 @@ function createStopwatchArea(ppl, time, pplArr) {
     convertToMinsSecs(time / ppl);
 
   timerArea.classList.remove("hidden"); // display main timer
-  mainTimerDisplay.innerText = convertToMinsSecs(time);
+  mainTimerDisplay.textContent = convertToMinsSecs(time);
   areaIntro.classList.add("notice");
   noticeArea.appendChild(areaIntro);
 
@@ -197,11 +197,11 @@ function createPeopleTest(i) {
   presenterDiv.classList.add("test-div");
   presenterDiv.classList.add("normal");
   presenterDiv.id = "presenter_" + (i + 1);
-  presenterName.innerText = timerState["presenter_" + (i + 1)].name;
-  timerButton.innerText = "select";
+  presenterName.textContent = timerState["presenter_" + (i + 1)].name;
+  timerButton.textContent = "select";
   presenterTime.classList.add("timer");
   presenterTime.id = "presenter_" + (i + 1) + "_timer";
-  presenterTime.innerText = "0:00"
+  presenterTime.textContent = "0:00"
 
   presenterDiv.appendChild(presenterName);
   presenterDiv.appendChild(presenterTime);
@@ -226,18 +226,18 @@ function divSelectionHandler(divClicked) {
       if (div.id === timerState.userSelected) {
         div.classList.remove("selected");
         div.classList.add("normal");
-        div.getElementsByTagName("button")[0].innerText = "select";
+        div.getElementsByTagName("button")[0].textContent = "select";
         timerState.userSelected = undefined;
       } else {
         div.classList.remove("normal");
         div.classList.add("selected");
-        div.getElementsByTagName("button")[0].innerText = "deselect";
+        div.getElementsByTagName("button")[0].textContent = "deselect";
         timerState.userSelected = div.id;
       }
     } else {
       div.classList.remove("selected");
       div.classList.add("normal");
-      div.getElementsByTagName("button")[0].innerText = "select";
+      div.getElementsByTagName("button")[0].textContent = "select";
     }
   });
 }
