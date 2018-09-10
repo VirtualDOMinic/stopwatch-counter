@@ -1,9 +1,19 @@
+/* 
+smoky black: 080708 
+peach: ffc09f 
+electric lavender: f6c9ff
+blue (crayola): 3772ff
+pastel purple: c19ab7
+
+
+*/
+
 * {
     box-sizing: border-box;
 }
 
 body {
-    background: linear-gradient(rgb(156, 206, 176), rgb(125, 152, 224));
+    background: linear-gradient(#ffc09f, #f6c9ff);
     min-height: 100vh;
     height: 100%;
     background-repeat: no-repeat;
@@ -15,7 +25,8 @@ body {
     text-align: center;
     font-size: 2rem;
     color: #000000;
-    background-color: hotpink;
+    /* hotpink: #ff69b4 */
+    background-color: #ff69b475; 
 }
 
 p {
@@ -44,11 +55,12 @@ h3 {
 }
 
 input {
-    border: 2px solid rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(0, 0, 0, 0.75);
+    border-radius: 5px;
     padding: 0.4rem;
     margin-top: 0.4rem;
     font-size: 1.6rem;
-    background-color: lavender;
+    background-color: #ffffff75;
     width: 30rem;
     max-width: 90%;
 }
@@ -63,6 +75,10 @@ button {
     margin: 0.4rem;
     padding: 0.4rem;
     border: solid 2px rgb(21, 21, 22);
+    border-radius: 5px;
+    width: 90%;
+    max-width: 40rem;
+    align-self: center;
 }
 
 #first-form {
@@ -75,7 +91,7 @@ button {
 
 #submit-btn-1 {
     margin-top: 2.4rem;
-    background: hotpink;
+    background: #c19ab7;
 }
 
 #stopwatch-area {
@@ -111,13 +127,13 @@ div[id*='presenter_'] {
 }
 
 .selected {
-    border-style: double;
-    border-color: hotpink;
-    background-color: hotpink;
+    border-style: solid;
+    border-color: #080708;
+    background-color: #3772ff;
 }
 
 .normal {
-    background-color: rgba(10, 10, 233, 0.15);
+    background-color: #3772ff50;
     border-style: dotted;
 }
 
