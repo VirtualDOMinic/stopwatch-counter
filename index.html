@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-GB">
 
 <head>
     <meta charset="utf-8" />
@@ -14,7 +14,7 @@
             <p id="noscript-warning" class="notice">Please enable JavaScript!</p>
     </noscript>
 
-    <h1>Group timer (WIP)</h1>
+    <h1>Group Timer (countdown and stopwatch)</h1>
 
     <section id="notice-area">
 
@@ -33,19 +33,30 @@
     </div>
 
     <section id="welcome">
-        <p id="welcome-msg">Welcome! Please fill in the form below to get started. This has been rushed and is very much
-            a WIP</p>
+        <p id="welcome-msg">
+            Welcome! Please fill in the form below to get started. 
+            <br>
+            Instructions can be found at the bottom of this page.
+        </p>
         <form id="first-form">
             <p>Number of people presenting:</p>
-            <input type="number" name="number-of-people" placeholder="integer pls" value="4" required>
+            <input type="number" name="number-of-people" placeholder="Integers only" value="4" required>
             <br>
             <p>Total time (minutes):</p>
-            <input type="number" name="time-minutes" placeholder="minutes pls" value="12" required>
+            <input type="number" name="time-minutes" placeholder="Minutes" value="12" required>
             <br>
-            <p>Names (unique, for now, and separated by commas). <br> Ideally add them in order (left to right):</p>
-            <input type="text" name="names" placeholder="names pls" value="Dom, C, B, A" required>
+            <p>Names (unique, for now, and separated by commas).</p>
+            <input type="text" name="names" placeholder="names pls" value="Person 1, Person 2, Person 3, Person 4" required>
             <input type="submit" value="Submit!" id="submit-btn-1">
         </form>
+    </section>
+    <section id="instructions">
+        <h2>Instructions</h2>
+        <p>
+                Fill in the form above with the number of people presenting, the total time of the presentation (<i>not</i> the time per person), and the names of each person. 
+                <br>
+                You will then be presented with a countdown timer (click or use space bar to start/pause) and 'stopwatches' for each presenter (click or use numbers 1-9, ordered from left/top to right/bottom, to select which person is talking and to tally up their total talking/presenting time). 
+        </p>
     </section>
     <script src="script.js" type="application/javascript"></script>
 </body>

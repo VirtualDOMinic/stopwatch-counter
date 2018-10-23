@@ -79,6 +79,7 @@ button {
     width: 90%;
     max-width: 40rem;
     align-self: center;
+    background-color: #9fc1ff;
 }
 
 #first-form {
@@ -129,11 +130,11 @@ div[id*='presenter_'] {
 .selected {
     border-style: solid;
     border-color: #080708;
-    background-color: #3772ff;
+    background-color: #9fc1ff85;
 }
 
 .normal {
-    background-color: #3772ff50;
+    /* background-color: #3772ff50; */
     border-style: dotted;
 }
 

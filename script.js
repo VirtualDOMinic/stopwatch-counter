@@ -35,16 +35,14 @@ var timerState = {
 };
 
 // first submit
-firstForm.addEventListener("submit", eventListenerCB);
+firstForm.addEventListener("submit", validateInputsAndCreateArea);
 
-function eventListenerCB(event) {
+function validateInputsAndCreateArea(event) {
 
   event.preventDefault();
-  console.log("Run: first form event listener");
 
   // clear old data on subsequent runs
   if(timerState.created){
-    console.log("timerState refreshed")
     timerState = {
       created: false,
       userSelected: undefined,
@@ -72,7 +70,7 @@ function eventListenerCB(event) {
   var timeInputVal = timeInput.value;
   var peoplesNamesArr = namesInput.value.split(", ");
 
-  //   input validation
+  // input validation
   if (peopleInputVal.match(/[^0-9]/g) || timeInputVal.match(/[^0-9]/g)) {
     stopwatchArea.textContent = "";
     welcomeMsg.textContent = "Please check your number inputs! Thanks";
@@ -86,7 +84,6 @@ function eventListenerCB(event) {
     welcomeMsg.textContent = "";
     timerStatepeople = Number(peopleInputVal);
     timerState.timeLeftMS = Number(timeInputVal) * 60 * 1000;
-    console.log(peoplesNamesArr);
 
     // populate stopwatch area after clearing it
     stopwatchArea.textContent = "";
@@ -100,7 +97,6 @@ function eventListenerCB(event) {
 
 function timerFunc() {
   // this is the function called every 1000 ms by setInterval
-  console.log("timerFunc called");
 
   if(timerState.timerActive === true){
     updateTimerStateObj();
@@ -129,7 +125,6 @@ function updateTimerDisplay() {
   } else {
     mainTimerDisplay.textContent = convertToMinsSecs(timerState.timeLeftMS);
   }
-  console.log("updateTimerDisplay called")
 }
 
 // convert ms value into a string of "mm:ss"
@@ -168,7 +163,6 @@ function mainStartBtnCB(e) {
 // function to create stopwatch area
 // Needs refactoring!
 function createStopwatchArea(ppl, time, pplArr) {
-  console.log("Run: createStopwatchArea");
   // create "overview" text description
   var areaIntro = document.createElement("p");
 
@@ -192,7 +186,6 @@ function createStopwatchArea(ppl, time, pplArr) {
 }
 
 stopwatchAreaListener = function() {
-  console.log("stopwatchAreaListener");
   stopwatchArea.addEventListener("click", stopwatchAreaListenerCB);
 };
 
@@ -207,7 +200,6 @@ function stopwatchAreaListenerCB(x) {
 
 // function to make objects to track peoples' time
 function createTimerObjects(timeMS, pplNames) {
-  console.log("Run: createTimerObjects");
   pplNum = pplNames.length;
   pplNames.forEach((p, i) => {
     timerState["presenter_" + (i + 1)] = {
@@ -220,7 +212,6 @@ function createTimerObjects(timeMS, pplNames) {
 
 // function to create divs for each person, eventually displaying time left, time taken and button to start/stop
 function createPeoplesDivs(people) {
-  console.log("Run: createPeopleDivs");
   // could use forEach here but not sure about browser support
   for (var i = 0; i < people; i++) {
     createPeopleTest(i);
@@ -228,7 +219,6 @@ function createPeoplesDivs(people) {
 }
 
 function createPeopleTest(i) {
-  console.log("Run: createPeopleTest");
   var presenterDiv = document.createElement("div");
   var timerButton = document.createElement("button");
   var presenterName = document.createElement("h3");
@@ -248,7 +238,6 @@ function createPeopleTest(i) {
 }
 
 selectUserForTimer = function(usr) {
-  console.log("Run: selectUserForTimer");
   // if user already selected, "deselect" them
   if (timerState.userSelected === usr) {
     timerState.userSelected = undefined;
@@ -258,7 +247,6 @@ selectUserForTimer = function(usr) {
 };
 
 function divSelectionHandler(divClicked) {
-  console.log("divSelectionHandler called");
   divClicked.parentElement.childNodes.forEach(function(div) {
     if (div.id === divClicked.id) {
       if (div.id === timerState.userSelected) {
