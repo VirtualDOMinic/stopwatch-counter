@@ -21,47 +21,45 @@ var mainTimerDisplay = document.getElementById("main-timer-display");
 var intervalID;
 
 if (!window) {
-  console.log("no window object! This scripts gonna fail");
-} else {
-  console.log("woo theres a window!");
+  console.log("No window object! This scripts gonna fail");
 }
 
-// Timer "state" object, which is updated to include a key for each presenter, which has another object with presenter data/state 
+// Timer "state" object, which is updated to include a key for each presenter, which has another object with presenter data/state
 var timerState = {
   created: false,
   userSelected: undefined,
   timerActive: false,
   timeLeftMS: 0,
+  dateNow: 0
 };
 
 // first submit
 firstForm.addEventListener("submit", validateInputsAndCreateArea);
 
 function validateInputsAndCreateArea(event) {
-
   event.preventDefault();
 
   // clear old data on subsequent runs
-  if(timerState.created){
+  if (timerState.created) {
     timerState = {
       created: false,
       userSelected: undefined,
       timerActive: false,
       timeLeftMS: 0,
-    }
+      dateNow: 0
+    };
 
     // clear top description of people and time per presenter
     noticeArea.textContent = "";
 
     //remove old eventListener to avoid it being called twice
-    stopwatchArea
-    .removeEventListener("click", stopwatchAreaListenerCB)
+    stopwatchArea.removeEventListener("click", stopwatchAreaListenerCB);
 
     // stop interval func
     clearInterval(intervalID);
 
     // reset start button text
-    mainStartBtn.textContent = "Start main timer"
+    mainStartBtn.textContent = "Start main timer";
   }
 
   timerState.created = true;
@@ -88,17 +86,20 @@ function validateInputsAndCreateArea(event) {
     // populate stopwatch area after clearing it
     stopwatchArea.textContent = "";
 
-    createStopwatchArea(peoplesNamesArr.length, timerState.timeLeftMS, peoplesNamesArr);
+    createStopwatchArea(
+      peoplesNamesArr.length,
+      timerState.timeLeftMS,
+      peoplesNamesArr
+    );
   }
 
   // scroll up to show notice, timer, etc
-  document.querySelector(".notice").scrollIntoView()
+  document.querySelector(".notice").scrollIntoView();
 }
 
 function timerFunc() {
-  // this is the function called every 1000 ms by setInterval
-
-  if(timerState.timerActive === true){
+  // this is the function called every X ms by setInterval
+  if (timerState.timerActive === true) {
     updateTimerStateObj();
     updateTimerDisplay();
   }
@@ -106,81 +107,97 @@ function timerFunc() {
 
 function updateTimerStateObj() {
   // placeholder func to update timerState.timeLeft value, and the specific presenter's time taken
-  timerState.timeLeftMS -= 1000;
 
-  if (timerState.userSelected){
-    timerState[timerState.userSelected].timeTakenMS += 1000;
+  let timePassed;
+
+  timerState.dateNow > 0 ? timePassed = Date.now() - timerState.dateNow : timePassed = 1000;
+
+  timerState.timeLeftMS -= timePassed;
+
+  if (timerState.userSelected) {
+    timerState[timerState.userSelected].timeTakenMS += timePassed;
   }
+
+  timerState.dateNow = Date.now()
 }
 
 function updateTimerDisplay() {
-  if (timerState.userSelected){
-    document.getElementById(timerState.userSelected + "_timer")
-    .textContent = 
-    convertToMinsSecs(timerState[timerState.userSelected].timeTakenMS);
+  if (timerState.userSelected) {
+    document.getElementById(
+      timerState.userSelected + "_timer"
+    ).textContent = convertToMinsSecs(
+      timerState[timerState.userSelected].timeTakenMS
+    );
   }
 
-  if(timerState.timeLeftMS < 0){
+  if (timerState.timeLeftMS < 0) {
     mainTimerDisplay.textContent = "Time up!";
   } else {
     mainTimerDisplay.textContent = convertToMinsSecs(timerState.timeLeftMS);
   }
 }
 
-// convert ms value into a string of "mm:ss"
-function convertToMinsSecs(ms){
-  var formattedTime = [Math.floor(ms / 60000)]
+/*
+  convert ms value into a string of "mm:ss"
+ 
+  Example:
+  > convertToMinsSecs(1000) // => 0:01
+ */
+
+function convertToMinsSecs(ms) {
+  var formattedTime = [Math.floor(ms / 60000)];
   // Add leading "0" to numbers under 10
-  formattedTime.push(
-    ('0' + ((ms % 60000)/1000))
-    .slice(-2)
-  )
-  return formattedTime.join(":")
+  formattedTime.push(("0" + Math.round((ms % 60000) / 1000)).slice(-2));
+  return formattedTime.join(":");
 }
 
 // main timer event listener function
 mainStartBtn.addEventListener("click", mainStartBtnCB);
 
 function mainStartBtnCB(e) {
-
   // only create one setInterval. Hacky way to do it but it works fine, and I can't think of any obvious scenarios where this falls down...
   // Easy alterntive is to create the setInterval on load, and never call it
-  if(e.target.textContent === "Start main timer"){
-    intervalID = window.setInterval(timerFunc, 1000);
+  if (e.target.textContent === "Start main timer") {
+    intervalID = window.setInterval(timerFunc, 998);
   }
-  
+
   //activate timer via timerState object (timerFunc relies on this)
   timerState.timerActive = !timerState.timerActive;
 
-  if(timerState.timerActive === true){
-    e.target.textContent = "pause"
+  if (timerState.timerActive === true) {
+    e.target.textContent = "pause";
   } else {
-    e.target.textContent = "resume"
+    e.target.textContent = "resume";
+    timerState.dateNow = 0;
   }
-
 }
 
 // function to create stopwatch area
 // Needs refactoring!
-function createStopwatchArea(ppl, time, pplArr) {
+function createStopwatchArea(numberOfPeople, time, arrOfPeople) {
   // create "overview" text description
   var areaIntro = document.createElement("p");
 
   areaIntro.textContent =
     "There are " +
-    ppl +
+    numberOfPeople +
     " people presenting (" +
-    pplArr.join(", ") +
+    arrOfPeople.join(", ") +
     "), and each presenter should aim to present for " +
-    convertToMinsSecs(time / ppl);
+    convertToMinsSecs(time / numberOfPeople);
 
   timerArea.classList.remove("hidden"); // display main timer
   mainTimerDisplay.textContent = convertToMinsSecs(time);
   areaIntro.classList.add("notice");
   noticeArea.appendChild(areaIntro);
 
-  createTimerObjects(time / ppl, pplArr);
-  createPeoplesDivs(ppl);
+  createTimerObjects(time / numberOfPeople, arrOfPeople);
+
+  // Create mini stopwatch divs for each presenter
+  for (var i = 0; i < numberOfPeople; i++) {
+    createPresenterStopwatches(i);
+  }
+
   // then call a function to add event listener to stopwatch area
   stopwatchAreaListener();
 }
@@ -192,10 +209,10 @@ stopwatchAreaListener = function() {
 function stopwatchAreaListenerCB(x) {
   if (x.target.id.includes("presenter") && !x.target.id.includes("timer")) {
     divSelectionHandler(x.target);
-  } else if (x.target.parentElement.id.includes("presenter")){
+  } else if (x.target.parentElement.id.includes("presenter")) {
     // this else if statement is to handle any div children
-    divSelectionHandler(x.target.parentElement)
-  } 
+    divSelectionHandler(x.target.parentElement);
+  }
 }
 
 // function to make objects to track peoples' time
@@ -210,15 +227,7 @@ function createTimerObjects(timeMS, pplNames) {
   });
 }
 
-// function to create divs for each person, eventually displaying time left, time taken and button to start/stop
-function createPeoplesDivs(people) {
-  // could use forEach here but not sure about browser support
-  for (var i = 0; i < people; i++) {
-    createPeopleTest(i);
-  }
-}
-
-function createPeopleTest(i) {
+function createPresenterStopwatches(i) {
   var presenterDiv = document.createElement("div");
   var timerButton = document.createElement("button");
   var presenterName = document.createElement("h3");
@@ -229,7 +238,7 @@ function createPeopleTest(i) {
   timerButton.textContent = "select";
   presenterTime.classList.add("timer");
   presenterTime.id = "presenter_" + (i + 1) + "_timer";
-  presenterTime.textContent = "0:00"
+  presenterTime.textContent = "0:00";
 
   presenterDiv.appendChild(presenterName);
   presenterDiv.appendChild(presenterTime);
@@ -246,6 +255,7 @@ selectUserForTimer = function(usr) {
   }
 };
 
+// Rename to "person..."?
 function divSelectionHandler(divClicked) {
   divClicked.parentElement.childNodes.forEach(function(div) {
     if (div.id === divClicked.id) {
@@ -271,25 +281,24 @@ function divSelectionHandler(divClicked) {
 // keyboard control - assuming up to 9 presenters
 var numStrArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
-document.addEventListener("keydown", function(e){
-  if(
-    numStrArr.includes(e.key)
-    && !e.key.ctrlKey 
-    && e.srcElement.nodeName.toLowerCase() !== "input"
-  ){
+document.addEventListener("keydown", function(e) {
+  if (
+    numStrArr.includes(e.key) &&
+    !e.key.ctrlKey &&
+    e.srcElement.nodeName.toLowerCase() !== "input"
+  ) {
     var presenterToSelect = "presenter_" + e.key;
-    if(document.getElementById(presenterToSelect)){
-      divSelectionHandler(document.getElementById(presenterToSelect))
+    if (document.getElementById(presenterToSelect)) {
+      divSelectionHandler(document.getElementById(presenterToSelect));
     }
-  }
-  else if(
-    e.key === " " 
-    && e.srcElement.nodeName.toLowerCase() === "body"
-    && !timer.classList.contains("hidden")
-  ){
+  } else if (
+    e.key === " " &&
+    e.srcElement.nodeName.toLowerCase() === "body" &&
+    !timer.classList.contains("hidden")
+  ) {
     // stop space bar from scrolling page
     e.preventDefault();
     // simulate click instead of calling mainStartBtnCB because the event needs to be passed in
     mainStartBtn.click();
   }
-})
+});
