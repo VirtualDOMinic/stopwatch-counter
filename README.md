@@ -41,11 +41,15 @@ Lines 1-18:
 `var timerState`:
 * Global "state" object accessible by all timer components
 * State stores "created" key that tells the script to refresh the state and the stopwatch elements on the page if it's already been created once. Seen in `if(timerState.created)` block inside the `validateInputsAndCreateArea` function
-* `userSelected` is used to 
+* `presenterSelected` is used by the `updateTimerStateObj` function to add time taken to the presenter who's selected (if anyone is)
+
+`firstForm.addEventListener("submit"...`
+Calls the below function when someone clicks submit on the first form (the one that asks for the number of presenters, their names, and total time) 
 
 `validateInputsAndCreateArea(event)`
-* Needs a better name, and to be modularised more and to be more DRY for better maintainability/readability. Future refactorisation! 
+* Probably needs a better name, and to be modularised more and to be DRYer for better maintainability/readability. 
 * `// input validation` section:
     * RegEx used to check that only integers have made it through the first input, and that the number of names (comma separated) matches the specified number in the first input
     * Displays error description to user as a `.notice` (styled class) that appears where the welcome message once was
-* If validation passes, run the `createStopwatchArea()` function
+* If validation passes, run the `createStopwatchArea()` function and then use `scrollIntoView()` to ensure the user can see the notice, timer, etc.
+* 

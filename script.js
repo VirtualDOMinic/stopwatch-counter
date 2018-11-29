@@ -1,7 +1,7 @@
 // elements to manipulate/check
 var timer = document.getElementById("timer");
 
-var numberOfPeople = document.getElementsByName("number-of-people")[0];
+var numberOfPresenters = document.getElementsByName("number-of-people")[0];
 var timeInput = document.getElementsByName("time-minutes")[0];
 var namesInput = document.getElementsByName("names")[0];
 
@@ -17,17 +17,17 @@ var timerArea = document.getElementById("timer");
 var mainStartBtn = document.getElementById("main-timer-start-btn");
 var mainTimerDisplay = document.getElementById("main-timer-display");
 
-// global intervalID so it can easily be stopped
+// global intervalID so it can easily be stopped by .clearInterval()
 var intervalID;
 
 if (!window) {
-  console.log("No window object! This scripts gonna fail");
+  console.log("No window object: this script won't work if you're running it in an environment without a window object.");
 }
 
 // Timer "state" object, which is updated to include a key for each presenter, which has another object with presenter data/state
 var timerState = {
   created: false,
-  userSelected: undefined,
+  presenterSelected: undefined,
   timerActive: false,
   timeLeftMS: 0,
   dateNow: 0
@@ -43,7 +43,7 @@ function validateInputsAndCreateArea(event) {
   if (timerState.created) {
     timerState = {
       created: false,
-      userSelected: undefined,
+      presenterSelected: undefined,
       timerActive: false,
       timeLeftMS: 0,
       dateNow: 0
@@ -64,16 +64,16 @@ function validateInputsAndCreateArea(event) {
 
   timerState.created = true;
 
-  var peopleInputVal = numberOfPeople.value;
+  var peopleInputVal = numberOfPresenters.value;
   var timeInputVal = timeInput.value;
-  var peoplesNamesArr = namesInput.value.split(", ");
+  var presentersNamesArr = namesInput.value.split(", ");
 
   // input validation
   if (peopleInputVal.match(/[^0-9]/g) || timeInputVal.match(/[^0-9]/g)) {
     stopwatchArea.textContent = "";
     welcomeMsg.textContent = "Please check your number inputs! Thanks";
     welcomeMsg.classList.add("notice");
-  } else if (peoplesNamesArr.length != peopleInputVal) {
+  } else if (presentersNamesArr.length != peopleInputVal) {
     stopwatchArea.textContent = "";
     welcomeMsg.textContent =
       "Please ensure that the number of names that you input matches the number of people presenting";
@@ -87,9 +87,9 @@ function validateInputsAndCreateArea(event) {
     stopwatchArea.textContent = "";
 
     createStopwatchArea(
-      peoplesNamesArr.length,
+      presentersNamesArr.length,
       timerState.timeLeftMS,
-      peoplesNamesArr
+      presentersNamesArr
     );
   }
 
@@ -114,19 +114,19 @@ function updateTimerStateObj() {
 
   timerState.timeLeftMS -= timePassed;
 
-  if (timerState.userSelected) {
-    timerState[timerState.userSelected].timeTakenMS += timePassed;
+  if (timerState.presenterSelected) {
+    timerState[timerState.presenterSelected].timeTakenMS += timePassed;
   }
 
   timerState.dateNow = Date.now()
 }
 
 function updateTimerDisplay() {
-  if (timerState.userSelected) {
+  if (timerState.presenterSelected) {
     document.getElementById(
-      timerState.userSelected + "_timer"
+      timerState.presenterSelected + "_timer"
     ).textContent = convertToMinsSecs(
-      timerState[timerState.userSelected].timeTakenMS
+      timerState[timerState.presenterSelected].timeTakenMS
     );
   }
 
@@ -174,27 +174,27 @@ function mainStartBtnCB(e) {
 
 // function to create stopwatch area
 // Needs refactoring!
-function createStopwatchArea(numberOfPeople, time, arrOfPeople) {
+function createStopwatchArea(numberOfPresenters, time, arrOfPresenters) {
   // create "overview" text description
   var areaIntro = document.createElement("p");
 
   areaIntro.textContent =
     "There are " +
-    numberOfPeople +
+    numberOfPresenters +
     " people presenting (" +
-    arrOfPeople.join(", ") +
+    arrOfPresenters.join(", ") +
     "), and each presenter should aim to present for " +
-    convertToMinsSecs(time / numberOfPeople);
+    convertToMinsSecs(time / numberOfPresenters);
 
   timerArea.classList.remove("hidden"); // display main timer
   mainTimerDisplay.textContent = convertToMinsSecs(time);
   areaIntro.classList.add("notice");
   noticeArea.appendChild(areaIntro);
 
-  createTimerObjects(time / numberOfPeople, arrOfPeople);
+  createTimerObjects(time / numberOfPresenters, arrOfPresenters);
 
   // Create mini stopwatch divs for each presenter
-  for (var i = 0; i < numberOfPeople; i++) {
+  for (var i = 0; i < numberOfPresenters; i++) {
     createPresenterStopwatches(i);
   }
 
@@ -215,7 +215,7 @@ function stopwatchAreaListenerCB(x) {
   }
 }
 
-// function to make objects to track peoples' time
+// function to make objects to track presenters' time
 function createTimerObjects(timeMS, pplNames) {
   pplNum = pplNames.length;
   pplNames.forEach((p, i) => {
@@ -248,10 +248,10 @@ function createPresenterStopwatches(i) {
 
 selectUserForTimer = function(usr) {
   // if user already selected, "deselect" them
-  if (timerState.userSelected === usr) {
-    timerState.userSelected = undefined;
+  if (timerState.presenterSelected === usr) {
+    timerState.presenterSelected = undefined;
   } else {
-    timerState.userSelected = usr;
+    timerState.presenterSelected = usr;
   }
 };
 
@@ -259,16 +259,16 @@ selectUserForTimer = function(usr) {
 function divSelectionHandler(divClicked) {
   divClicked.parentElement.childNodes.forEach(function(div) {
     if (div.id === divClicked.id) {
-      if (div.id === timerState.userSelected) {
+      if (div.id === timerState.presenterSelected) {
         div.classList.remove("selected");
         div.classList.add("normal");
         div.getElementsByTagName("button")[0].textContent = "select";
-        timerState.userSelected = undefined;
+        timerState.presenterSelected = undefined;
       } else {
         div.classList.remove("normal");
         div.classList.add("selected");
         div.getElementsByTagName("button")[0].textContent = "deselect";
-        timerState.userSelected = div.id;
+        timerState.presenterSelected = div.id;
       }
     } else {
       div.classList.remove("selected");
